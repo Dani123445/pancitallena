@@ -77,7 +77,7 @@
                 </div>`;
             }).join('');
         }
-        fetch('http://127.0.0.1:8080/perros')
+        fetch('https://pancitallena.onrender.com/perros')
             .then(r => r.json())
             .then(animales => {
                 renderGaleria('galeria-gatos',  animales.filter(a => a.tipo === 'gato'));
