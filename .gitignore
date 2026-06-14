@@ -5,8 +5,7 @@
 out/
 *.class
 
-# Librerías
-lib/
+# lib/
 
 # Imágenes
 *.png
