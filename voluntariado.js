@@ -72,7 +72,8 @@ function procesarRegistro(e) {
         return response.json();
     })
     .then(data => {
-        localStorage.setItem('resultadoVoluntario', JSON.stringify({
+    console.log('Respuesta del servidor:', JSON.stringify(data));
+    localStorage.setItem('resultadoVoluntario', JSON.stringify({
             localidad:  localidadStr,
             match:      data.match,
             companeros: data.companeros,
