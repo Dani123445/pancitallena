@@ -36,7 +36,7 @@ private static String buildUrl() {
                 + " idAsociado INTEGER DEFAULT NULL"
                 + ");";
         String sqlTablaHistorial = "CREATE TABLE IF NOT EXISTS historial ("
-                + " id_historial INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + " id_historial INTEGER PRIMARY KEY SERIAL,"
                 + " id_voluntario INTEGER NOT NULL,"
                 + " descripcion TEXT NOT NULL,"
                 + " fecha TEXT DEFAULT CURRENT_TIMESTAMP"
@@ -59,7 +59,7 @@ private static String buildUrl() {
                 + " fecha TEXT NOT NULL"
                 + ");";
              String sqlTablaComunidad = "CREATE TABLE IF NOT EXISTS comunidad ("
-                + " id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + " id INTEGER PRIMARY KEY SERIAL,"
                 + " titulo TEXT NOT NULL,"
                 + " descripcion TEXT,"
                 + " imagen TEXT NOT NULL,"
