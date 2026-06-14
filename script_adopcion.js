@@ -76,8 +76,6 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     document.addEventListener('click', cerrarTodosLosSelects);
-
-    // ── Convertir todos los selects estáticos ──
     convertirSelectCustom('distrito',      'select-distrito');
     convertirSelectCustom('vivienda',      'select-vivienda', function(valor) {
         document.getElementById('vivienda_otro').style.display =
@@ -87,11 +85,9 @@ window.addEventListener('DOMContentLoaded', () => {
     convertirSelectCustom('tipo_mascota',  'select-tipo-mascota');
 
     document.getElementById('vivienda_otro').style.display = 'none';
-
-    // ── Cargar mascotas del servidor y construir select-custom dinámico ──
     let mascotaValorInput = null;
 
-    fetch('http://127.0.0.1:8080/perros')
+    fetch('https://pancitallena.onrender.com/perros')
         .then(r => r.json())
         .then(perros => {
             const disponibles = perros.filter(p => p.estado === 'Disponible');
