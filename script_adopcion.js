@@ -255,3 +255,28 @@ window.addEventListener('DOMContentLoaded', () => {
         .catch(() => alert('Error de conexión.'));
     });
 });
+document.querySelector('form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const datos = {
+        mascota: document.getElementById('mascota_elegida').value,
+        nombre: document.getElementById('nombre').value,
+        correo: document.getElementById('email').value,
+        telefono: document.getElementById('telefono').value,
+        fecha: new Date().toLocaleDateString('es-PE')
+    };
+
+    // Enviar a Formspree
+    const respuesta = await fetch('https://formspree.io/f/mlgkgnqq', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos)
+    });
+
+    if (respuesta.ok) {
+        sessionStorage.setItem('solicitudAdopcion', JSON.stringify(datos));
+        window.location.href = 'espera.html';
+    } else {
+        alert('Hubo un error al enviar. Inténtalo de nuevo.');
+    }
+});

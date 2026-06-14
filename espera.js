@@ -1,4 +1,4 @@
-const datos = JSON.parse(localStorage.getItem('solicitudAdopcion'));
+const datos = JSON.parse(sessionStorage.getItem('solicitudAdopcion'));
 if (datos) {
     const resumen = document.getElementById('resumen-solicitud');
     resumen.innerHTML = `
