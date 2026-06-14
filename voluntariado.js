@@ -1,3 +1,7 @@
+if (localStorage.getItem('resultadoVoluntario')) {
+    window.location.href = 'exito.html';
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     crearSelectCustom('select-localidad', [
         { valor: 'La Esperanza',        texto: 'La Esperanza' },
