@@ -340,4 +340,31 @@ public static Voluntario obtenerCompanero(int idVoluntario) {
     }
     return null;
 }
+public static String obtenerTodosLosCompaneros(int idVoluntario) {
+    String sql = "SELECT v.id, v.nombre, v.celular, v.correo " +
+                 "FROM voluntarios v " +
+                 "WHERE v.idAsociado = ? OR v.id IN " +
+                 "(SELECT idAsociado FROM voluntarios WHERE id = ? AND idAsociado IS NOT NULL);";
+    StringBuilder sb = new StringBuilder("[");
+    try (Connection conexion = DriverManager.getConnection(URL);
+         PreparedStatement pstmt = conexion.prepareStatement(sql)) {
+        pstmt.setInt(1, idVoluntario);
+        pstmt.setInt(2, idVoluntario);
+        ResultSet rs = pstmt.executeQuery();
+        boolean primero = true;
+        while (rs.next()) {
+            if (!primero) sb.append(",");
+            sb.append("{")
+                .append("\"nombre\":\"").append(rs.getString("nombre")).append("\",")
+                .append("\"celular\":\"").append(rs.getString("celular")).append("\",")
+                .append("\"correo\":\"").append(rs.getString("correo")).append("\"")
+                .append("}");
+            primero = false;
+        }
+    } catch (SQLException e) {
+        System.out.println("Error al obtener compañeros: " + e.getMessage());
+    }
+    sb.append("]");
+    return sb.toString();
+}
 }

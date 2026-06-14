@@ -517,15 +517,12 @@ static class WebCompaneroHandler implements HttpHandler {
         String jsonRespuesta;
         try {
            int id = Integer.parseInt(query.replace("id=", "").trim());
-                Voluntario companero = BaseDatos.obtenerCompanero(id);
-                if (companero == null) {
-                    jsonRespuesta = "{\"status\":\"sin_companero\"}";
-                } else {
-                    jsonRespuesta = "{\"status\":\"success\","
-                        + "\"nombre\":\"" + companero.getNombre() + "\","
-                        + "\"celular\":\"" + companero.getCelular() + "\","
-                        + "\"correo\":\"" + companero.getCorreo() + "\"}";
-                }
+           String companeros = BaseDatos.obtenerTodosLosCompaneros(id);
+            if (companeros.equals("[]")) {
+                jsonRespuesta = "{\"status\":\"sin_companero\"}";
+            } else {
+                jsonRespuesta = "{\"status\":\"success\",\"companeros\":" + companeros + "}";
+            }
         } catch (Exception e) {
             jsonRespuesta = "{\"status\":\"error\"}";
         }

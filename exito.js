@@ -68,8 +68,27 @@ if (datosActuales && datosActuales.dni && !datosActuales.match) {
     fetch(`https://pancitallena.onrender.com/companero?id=${datosActuales.dni}`)
         .then(r => r.json())
         .then(data => {
-            if (data.status === 'success') {
+            if (data.status === 'success' && data.companeros) {
                 const contenedorTabla = document.getElementById('contenedor-tabla-companeros');
+                const lista = new ListaEnlazada();
+                function cargarCompaneros(companeros, idx) {
+                    if (idx >= companeros.length) return;
+                    lista.insertar(companeros[idx]);
+                    cargarCompaneros(companeros, idx + 1);
+                }
+                cargarCompaneros(data.companeros, 0);
+                let filas = '';
+                function generarFilas(nodo) {
+                    if (!nodo) return;
+                    filas += `
+                        <tr>
+                            <td style="padding:10px;border:1px solid #ddd;text-align:center;">${nodo.dato.nombre}</td>
+                            <td style="padding:10px;border:1px solid #ddd;text-align:center;">${nodo.dato.celular}</td>
+                            <td style="padding:10px;border:1px solid #ddd;text-align:center;">${nodo.dato.correo}</td>
+                        </tr>`;
+                    generarFilas(nodo.siguiente);
+                }
+                generarFilas(lista.cabeza);
                 contenedorTabla.innerHTML = `
                     <table class="tabla-companeros" style="width:100%;border-collapse:collapse;margin-top:10px;">
                         <thead>
@@ -79,13 +98,7 @@ if (datosActuales && datosActuales.dni && !datosActuales.match) {
                                 <th style="padding:10px;border:1px solid #ddd;">Correo</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td style="padding:10px;border:1px solid #ddd;text-align:center;">${data.nombre}</td>
-                                <td style="padding:10px;border:1px solid #ddd;text-align:center;">${data.celular}</td>
-                                <td style="padding:10px;border:1px solid #ddd;text-align:center;">${data.correo}</td>
-                            </tr>
-                        </tbody>
+                        <tbody>${filas}</tbody>
                     </table>`;
             }
         })
