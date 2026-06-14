@@ -34,30 +34,41 @@ function verHistorial() {
     fetch(`https://pancitallena.onrender.com/historial-donaciones?correo=${encodeURIComponent(correo)}`)
         .then(r => r.json())
         .then(historial => {
-            if (historial.length === 0) {
+            const lista = new ListaEnlazada();
+            function cargarHistorial(data, idx) {
+                if (idx >= data.length) return;
+                lista.insertar(data[idx]);
+                cargarHistorial(data, idx + 1);
+            }
+            cargarHistorial(historial, 0);
+
+            if (lista.estaVacia()) {
                 document.getElementById('tabla-historial').innerHTML =
                     '<p style="font-family:sans-serif;color:#666;">No hay donaciones registradas.</p>';
             } else {
                 let filas = '';
-                historial.forEach(d => {
+                function generarFilas(nodo) {
+                    if (!nodo) return;
                     filas += `
                         <tr>
-                            <td style="padding:8px; border:1px solid #ddd;">${d.cip}</td>
-                            <td style="padding:8px; border:1px solid #ddd;">${d.nombre}</td>
-                            <td style="padding:8px; border:1px solid #ddd;">S/ ${d.monto}</td>
-                            <td style="padding:8px; border:1px solid #ddd;">${d.metodo}</td>
-                            <td style="padding:8px; border:1px solid #ddd;">${d.fecha}</td>
+                            <td style="padding:8px;border:1px solid #ddd;">${nodo.dato.cip}</td>
+                            <td style="padding:8px;border:1px solid #ddd;">${nodo.dato.nombre}</td>
+                            <td style="padding:8px;border:1px solid #ddd;">S/ ${nodo.dato.monto}</td>
+                            <td style="padding:8px;border:1px solid #ddd;">${nodo.dato.metodo}</td>
+                            <td style="padding:8px;border:1px solid #ddd;">${nodo.dato.fecha}</td>
                         </tr>`;
-                });
+                    generarFilas(nodo.siguiente);
+                }
+                generarFilas(lista.cabeza);
                 document.getElementById('tabla-historial').innerHTML = `
-                    <table style="width:100%; border-collapse:collapse; font-family:sans-serif; font-size:13px;">
+                    <table style="width:100%;border-collapse:collapse;font-family:sans-serif;font-size:13px;">
                         <thead>
-                            <tr style="background-color:#2ec4b6; color:white;">
-                                <th style="padding:8px; border:1px solid #ddd;">CIP</th>
-                                <th style="padding:8px; border:1px solid #ddd;">Nombre</th>
-                                <th style="padding:8px; border:1px solid #ddd;">Monto</th>
-                                <th style="padding:8px; border:1px solid #ddd;">Método</th>
-                                <th style="padding:8px; border:1px solid #ddd;">Fecha</th>
+                            <tr style="background-color:#2ec4b6;color:white;">
+                                <th style="padding:8px;border:1px solid #ddd;">CIP</th>
+                                <th style="padding:8px;border:1px solid #ddd;">Nombre</th>
+                                <th style="padding:8px;border:1px solid #ddd;">Monto</th>
+                                <th style="padding:8px;border:1px solid #ddd;">Método</th>
+                                <th style="padding:8px;border:1px solid #ddd;">Fecha</th>
                             </tr>
                         </thead>
                         <tbody>${filas}</tbody>
@@ -67,30 +78,40 @@ function verHistorial() {
         })
         .catch(() => alert('Error al cargar historial.'));
 }
+
 function exportarHistorial() {
     const correo = datos ? datos.correo : '';
     if (!correo) { alert('No se encontró tu correo.'); return; }
-
     fetch(`https://pancitallena.onrender.com/historial-donaciones?correo=${encodeURIComponent(correo)}`)
         .then(r => r.json())
         .then(historial => {
-            if (historial.length === 0) {
+            const lista = new ListaEnlazada();
+            function cargarHistorial(data, idx) {
+                if (idx >= data.length) return;
+                lista.insertar(data[idx]);
+                cargarHistorial(data, idx + 1);
+            }
+            cargarHistorial(historial, 0);
+
+            if (lista.estaVacia()) {
                 alert('No tienes donaciones registradas.');
                 return;
             }
-
             let filas = '';
-            historial.forEach(d => {
+            function generarFilas(nodo) {
+                if (!nodo) return;
                 filas += `
                     <tr>
-                        <td>${d.cip}</td>
-                        <td>${d.nombre}</td>
-                        <td>${d.correo}</td>
-                        <td>S/ ${d.monto}</td>
-                        <td>${d.metodo}</td>
-                        <td>${d.fecha}</td>
+                        <td>${nodo.dato.cip}</td>
+                        <td>${nodo.dato.nombre}</td>
+                        <td>${nodo.dato.correo}</td>
+                        <td>S/ ${nodo.dato.monto}</td>
+                        <td>${nodo.dato.metodo}</td>
+                        <td>${nodo.dato.fecha}</td>
                     </tr>`;
-            });
+                generarFilas(nodo.siguiente);
+            }
+            generarFilas(lista.cabeza);
 
             const ventana = window.open('', '_blank');
             ventana.document.write(`
@@ -100,55 +121,20 @@ function exportarHistorial() {
                     <meta charset="UTF-8">
                     <title>Historial de Donaciones - Pancita Llena</title>
                     <style>
-                        body {
-                            font-family: sans-serif;
-                            padding: 30px;
-                            color: #333;
-                        }
-                        .encabezado {
-                            text-align: center;
-                            margin-bottom: 30px;
-                        }
-                        .encabezado h1 {
-                            color: #5ec42e;
-                            font-size: 24px;
-                            margin-bottom: 5px;
-                        }
-                        .encabezado p {
-                            color: #888;
-                            font-size: 13px;
-                        }
-                        table {
-                            width: 100%;
-                            border-collapse: collapse;
-                            font-size: 13px;
-                        }
-                        thead tr {
-                            background-color: #2ec44a;
-                            color: white;
-                        }
-                        th, td {
-                            padding: 10px 12px;
-                            border: 1px solid #ddd;
-                            text-align: left;
-                        }
-                        tbody tr:nth-child(even) {
-                            background-color: #f7f9f6;
-                        }
-                        .pie {
-                            margin-top: 30px;
-                            text-align: center;
-                            font-size: 12px;
-                            color: #aaa;
-                        }
-                        @media print {
-                            body { padding: 10px; }
-                        }
+                        body { font-family:sans-serif; padding:30px; color:#333; }
+                        .encabezado { text-align:center; margin-bottom:30px; }
+                        .encabezado h1 { color:#5ec42e; font-size:24px; margin-bottom:5px; }
+                        .encabezado p { color:#888; font-size:13px; }
+                        table { width:100%; border-collapse:collapse; font-size:13px; }
+                        thead tr { background-color:#2ec44a; color:white; }
+                        th, td { padding:10px 12px; border:1px solid #ddd; text-align:left; }
+                        tbody tr:nth-child(even) { background-color:#f7f9f6; }
+                        .pie { margin-top:30px; text-align:center; font-size:12px; color:#aaa; }
                     </style>
                 </head>
                 <body>
                     <div class="encabezado">
-                        <h1> Pancita Llena</h1>
+                        <h1>Pancita Llena</h1>
                         <p>Historial de donaciones de: <strong>${correo}</strong></p>
                         <p>Generado el: ${new Date().toLocaleDateString()}</p>
                     </div>
@@ -168,11 +154,7 @@ function exportarHistorial() {
                     <div class="pie">
                         <p>© 2026 Pancita Llena. Todos los derechos reservados.</p>
                     </div>
-                    <script>
-                        window.onload = function() {
-                            window.print();
-                        }
-                    </script>
+                    <script>window.onload = function() { window.print(); }<\/script>
                 </body>
                 </html>
             `);

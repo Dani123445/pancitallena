@@ -118,45 +118,6 @@
                     <h3>Árbol BST de Animales</h3>
                     <div id="contenedor-arbol" style="overflow-x:auto;"></div>
                 </div>
-
-                <div id="seccion-comunidad" class="oculto">
-                    <h3>Galería Comunidad</h3>
-                    <div class="fila">
-                        <button id="btn-mostrar-form-comunidad" onclick="mostrarFormularioComunidad()">Agregar imagen</button>
-                    </div>
-                    <div id="seccion-agregar-comunidad" class="oculto">
-                        <h3>Nueva imagen para Comunidad</h3>
-                        <div class="fila">
-                            <div class="campo">
-                                <label>Título *</label>
-                                <input type="text" id="comunidad-titulo" placeholder="Ej: Jornada de esterilización 2026">
-                            </div>
-                        </div>
-                        <div class="fila">
-                            <div class="campo">
-                                <label>Descripción</label>
-                                <textarea id="comunidad-descripcion" placeholder="Breve descripción de la actividad o momento..."></textarea>
-                            </div>
-                        </div>
-                        <div class="fila">
-                            <div class="campo">
-                                <label>Imagen *</label>
-                                <div class="upload-area" onclick="document.getElementById('comunidad-foto').click()">
-                                    <p>Haz clic para seleccionar una foto</p>
-                                    <p id="comunidad-nombre-foto">Ningún archivo seleccionado</p>
-                                    <img id="comunidad-preview" alt="Vista previa">
-                                </div>
-                                <input type="file" id="comunidad-foto" accept="image/*" class="oculto" multiple>
-                            </div>
-                        </div>
-                        <div class="acciones">
-                            <button id="btn-guardar-comunidad" onclick="agregarImagenComunidad()">Guardar imagen</button>
-                            <button onclick="cancelarComunidad()">Cancelar</button>
-                        </div>
-                    </div>
-                    <div id="contenedor-comunidad"></div>
-                </div>
-
             </div>
         </div>
     </main>

@@ -16,7 +16,6 @@ public class pancitallena {
         BaseDatos.cargarDatos(lista);
         BaseDatos.cargarPerros(listaPerros);
         lista.reconstruirAsociaciones();
-        BaseDatos.insertarComunidadInicial();
         arrancarServidorWeb();
         System.out.println("[SISTEMA] Servidor listo. Esperando peticiones...");
     }
@@ -36,7 +35,6 @@ public class pancitallena {
             servidor.createContext("/donaciones",   new WebDonacionesHandler());
             servidor.createContext("/companero", new WebCompaneroHandler());
             servidor.createContext("/", new WebArchivosHandler());
-            servidor.createContext("/comunidad", new WebComunidadHandler());
             servidor.setExecutor(null);
             servidor.start();
             System.out.println("[SERVIDOR WEB ACTIVO] Escuchando en el puerto: " + puerto);
@@ -481,65 +479,7 @@ public class pancitallena {
         os.close();
         }
     }
-    static class WebComunidadHandler implements HttpHandler {
-    @Override
-    public void handle(HttpExchange exchange) throws IOException {
-        exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
-        exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
-        exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type");
-        if ("OPTIONS".equalsIgnoreCase(exchange.getRequestMethod())) {
-            exchange.sendResponseHeaders(204, -1);
-            return;
-        }
-        String jsonRespuesta;
-        if ("GET".equalsIgnoreCase(exchange.getRequestMethod())) {
-            jsonRespuesta = BaseDatos.obtenerComunidadJson();
-        } else if ("POST".equalsIgnoreCase(exchange.getRequestMethod())) {
-            BufferedReader br = new BufferedReader(
-                new InputStreamReader(exchange.getRequestBody(), StandardCharsets.UTF_8));
-            StringBuilder sb = new StringBuilder();
-            String linea;
-            while ((linea = br.readLine()) != null) sb.append(linea);
-            String json = sb.toString();
-            try {
-                String titulo      = buscarValorJson(json, "titulo");
-                String descripcion = buscarValorJson(json, "descripcion");
-                String imagen      = buscarValorJson(json, "imagen");
-                BaseDatos.guardarImagenComunidad(titulo, descripcion, imagen);
-                jsonRespuesta = "{\"status\":\"success\",\"message\":\"Imagen registrada.\"}";
-                System.out.println("[WEB] Imagen comunidad registrada: " + titulo);
-            } catch (Exception e) {
-                jsonRespuesta = "{\"status\":\"error\",\"message\":\"Error al registrar imagen.\"}";
-            }
-        } else if ("DELETE".equalsIgnoreCase(exchange.getRequestMethod())) {
-            String query = exchange.getRequestURI().getQuery();
-            try {
-                int id = Integer.parseInt(query.replace("id=", "").trim());
-                BaseDatos.eliminarImagenComunidad(id);
-                jsonRespuesta = "{\"status\":\"success\",\"message\":\"Imagen eliminada.\"}";
-            } catch (Exception e) {
-                jsonRespuesta = "{\"status\":\"error\",\"message\":\"Error al eliminar.\"}";
-            }
-        } else {
-            jsonRespuesta = "{\"status\":\"error\",\"message\":\"Método no permitido.\"}";
-        }
-        byte[] bytes = jsonRespuesta.getBytes(StandardCharsets.UTF_8);
-        exchange.getResponseHeaders().set("Content-Type", "application/json; charset=UTF-8");
-        exchange.sendResponseHeaders(200, bytes.length);
-        OutputStream os = exchange.getResponseBody();
-        os.write(bytes);
-        os.close();
-    }
-    private String buscarValorJson(String json, String llave) {
-        String patron = "\"" + llave + "\":\"";
-        int inicio = json.indexOf(patron);
-        if (inicio == -1) return "";
-        inicio += patron.length();
-        int fin = json.indexOf("\"", inicio);
-        return json.substring(inicio, fin);
-    }
-}
-static class WebArchivosHandler implements HttpHandler {
+    static class WebArchivosHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         String ruta = exchange.getRequestURI().getPath();

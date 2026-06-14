@@ -1496,80 +1496,113 @@ legend {
     flex-shrink: 0;
 }
 
-/*RESPONSIVE — 768px*/
-.comunidad-titulo {
+.comunidad-voluntariado,
+.comunidad-voluntariado2,
+.comunidad-voluntariado3 {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 30px 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    box-sizing: border-box;
     text-align: center;
-    padding: 50px 20px 20px;
+}
+
+.comunidad-voluntariado  { background: #f3e8ff; }
+.comunidad-voluntariado2 { background: #e8f4fd; }
+.comunidad-voluntariado3 { background: #e8f8f0; }
+
+.comunidad-voluntariado h2,
+.comunidad-voluntariado2 h2,
+.comunidad-voluntariado3 h2 {
+    font-size: clamp(18px, 4vw, 26px);
+    color: #8e44ad;
+    margin-bottom: 20px;
+    text-align: center;
+    font-family: "Oswald", sans-serif;
+    border-bottom: 3px solid #fcc661;
+    padding-bottom: 10px;
+}
+
+.comunidad-voluntariado2 h2 { color: #2f6894; border-color: #73ba49; }
+.comunidad-voluntariado3 h2 { color: #3b6b5c; border-color: #2ec4b6; }
+
+.comunidad-voluntariado img,
+.comunidad-voluntariado2 img,
+.comunidad-voluntariado3 img {
+    width: calc(25% - 10px);
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    display: inline-block;
+    margin: 5px;
+    transition: transform 0.3s ease;
+    vertical-align: top;
+}
+
+.comunidad-voluntariado img:hover,
+.comunidad-voluntariado2 img:hover,
+.comunidad-voluntariado3 img:hover {
+    transform: scale(1.03);
+}
+
+.comunidad-voluntariado p,
+.comunidad-voluntariado2 p,
+.comunidad-voluntariado3 p {
+    margin-top: 20px;
+    font-size: 16px;
+    line-height: 1.8;
+    color: #444;
+    text-align: justify;
+    font-family: sans-serif;
+}
+
+main > h1 {
+    text-align: center;
+    font-size: clamp(28px, 6vw, 48px);
+    color: #8e44ad;
+    padding: 40px 20px 10px;
     font-family: "Oswald", sans-serif;
 }
-.comunidad-titulo h1 {
-    font-size: clamp(28px, 6vw, 42px);
-    color: #8e44ad;
-    margin-bottom: 10px;
+@media (max-width: 900px) {
+    .comunidad-voluntariado img,
+    .comunidad-voluntariado2 img,
+    .comunidad-voluntariado3 img {
+        width: calc(33% - 10px);
+        height: 160px;
+    }
 }
-.comunidad-titulo p {
-    font-size: 16px;
-    color: #555;
-    font-family: sans-serif;
-    max-width: 600px;
-    margin: 0 auto;
+
+@media (max-width: 600px) {
+    .comunidad-voluntariado img,
+    .comunidad-voluntariado2 img,
+    .comunidad-voluntariado3 img {
+        width: calc(50% - 10px);
+        height: 130px;
+    }
+
+    .comunidad-voluntariado,
+    .comunidad-voluntariado2,
+    .comunidad-voluntariado3 {
+        margin: 20px 10px;
+        padding: 20px 15px;
+    }
+
+    .comunidad-voluntariado p,
+    .comunidad-voluntariado2 p,
+    .comunidad-voluntariado3 p {
+        font-size: 14px;
+    }
 }
-.comunidad-galeria {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-    padding: 20px 30px 50px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-.comunidad-card {
-    position: relative;
-    overflow: hidden;
-    border-radius: 15px;
-    height: 220px;
-}
-.comunidad-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.4s ease;
-}
-.comunidad-card:hover img {
-    transform: scale(1.08);
-}
-.comunidad-card-titulo {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: rgba(0,0,0,0.55);
-    color: white;
-    padding: 10px 12px;
-    font-size: 14px;
-    font-family: sans-serif;
-    box-sizing: border-box;
-}
-.comunidad-card-info {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: rgba(0,0,0,0.6);
-    color: white;
-    padding: 10px 12px;
-    font-family: sans-serif;
-    box-sizing: border-box;
-}
-.comunidad-card-titulo {
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 3px;
-}
-.comunidad-card-descripcion {
-    font-size: 12px;
-    color: #ddd;
-    line-height: 1.3;
+
+@media (max-width: 380px) {
+    .comunidad-voluntariado img,
+    .comunidad-voluntariado2 img,
+    .comunidad-voluntariado3 img {
+        width: 100%;
+        height: 180px;
+        margin: 5px 0;
+    }
 }
 
 @media (max-width: 768px) {

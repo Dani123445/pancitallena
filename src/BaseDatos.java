@@ -63,17 +63,9 @@ private static String buildUrl() {
                 + " metodo TEXT NOT NULL,"
                 + " fecha TEXT NOT NULL"
                 + ");";
-             String sqlTablaComunidad = "CREATE TABLE IF NOT EXISTS comunidad ("
-                +  "id SERIAL PRIMARY KEY,"
-                + " titulo TEXT NOT NULL,"
-                + " descripcion TEXT,"
-                + " imagen TEXT NOT NULL,"
-                + " fecha TEXT DEFAULT CURRENT_TIMESTAMP"
-                + ");";
         try (Connection conexion = DriverManager.getConnection(URL);
             Statement stmt = conexion.createStatement()) {
             stmt.execute(sqlTablaVoluntarios);
-            stmt.execute(sqlTablaComunidad);
             stmt.execute(sqlTablaHistorial);
             stmt.execute(sqlTablaPerros);
             stmt.execute(sqlTablaDonaciones);
@@ -326,91 +318,6 @@ public static void cargarTodasLasDonaciones(PilaDonaciones pila) {
     } catch (SQLException e) {
         System.out.println("Error al cargar donaciones: " + e.getMessage());
     }
-}
-public static void insertarComunidadInicial() {
-    String sqlCheck = "SELECT COUNT(*) FROM comunidad;";
-    try (Connection conexion = DriverManager.getConnection(URL);
-         Statement stmt = conexion.createStatement();
-         ResultSet rs   = stmt.executeQuery(sqlCheck)) {
-        if (rs.next() && rs.getInt(1) > 0) {
-            System.out.println("[Base de Datos] Comunidad ya tiene imágenes, no se insertan.");
-            return;
-        }
-    } catch (SQLException e) {
-        System.out.println("Error al verificar comunidad: " + e.getMessage());
-        return;
-    }
-    String sql = "INSERT INTO comunidad(titulo, descripcion, imagen) VALUES(?,?,?);";
-    try (Connection conexion = DriverManager.getConnection(URL);
-         PreparedStatement pstmt = conexion.prepareStatement(sql)) {
-        insertarDatoComunidad(pstmt, "Jornada de esterilización 2026", "Trabajamos junto a veterinarios voluntarios para reducir la población callejera.", "comunidad1.jpg");
-        insertarDatoComunidad(pstmt, "Visita al refugio La Esperanza", "Recorrido por la zona donde apoyamos a varios animalitos.", "comunidad2.jpg");
-        insertarDatoComunidad(pstmt, "Entrega de alimento", "Reparto semanal de comida para perros y gatos de la comunidad.", "comunidad3.jpg");
-        insertarDatoComunidad(pstmt, "Voluntarios en acción", "Nuestro equipo cuidando y registrando a los animales.", "comunidad4.jpg");
-        insertarDatoComunidad(pstmt, "Adopción exitosa", "Otro integrante encontró un hogar lleno de amor.", "comunidad5.jpg");
-        System.out.println("[Base de Datos] Imágenes de comunidad iniciales insertadas.");
-    } catch (SQLException e) {
-        System.out.println("Error al insertar comunidad: " + e.getMessage());
-    }
-}
-
-private static void insertarDatoComunidad(PreparedStatement pstmt, String titulo, String descripcion, String imagen) throws SQLException {
-    pstmt.setString(1, titulo);
-    pstmt.setString(2, descripcion);
-    pstmt.setString(3, imagen);
-    pstmt.executeUpdate();
-}
-
-public static void eliminarImagenComunidad(int id) {
-    String sql = "DELETE FROM comunidad WHERE id = ?;";
-    try (Connection conexion = DriverManager.getConnection(URL);
-         PreparedStatement pstmt = conexion.prepareStatement(sql)) {
-        pstmt.setInt(1, id);
-        pstmt.executeUpdate();
-        System.out.println("[Base de Datos] Imagen comunidad eliminada con ID: " + id);
-    } catch (SQLException e) {
-        System.out.println("Error al eliminar imagen comunidad: " + e.getMessage());
-    }
-}
-public static void guardarImagenComunidad(String titulo, String descripcion, String imagen) {
-    String sql = "INSERT INTO comunidad(titulo, descripcion, imagen) VALUES(?,?,?);";
-    try (Connection conexion = DriverManager.getConnection(URL);
-         PreparedStatement pstmt = conexion.prepareStatement(sql)) {
-        pstmt.setString(1, titulo);
-        pstmt.setString(2, descripcion);
-        pstmt.setString(3, imagen);
-        pstmt.executeUpdate();
-        System.out.println("[Base de Datos] Imagen de comunidad guardada: " + titulo);
-    } catch (SQLException e) {
-        System.out.println("Error al guardar imagen comunidad: " + e.getMessage());
-    }
-}
-
-public static String obtenerComunidadJson() {
-    StringBuilder sb = new StringBuilder("[");
-    String sql = "SELECT id, titulo, descripcion, imagen, fecha FROM comunidad ORDER BY id DESC;";
-    try (Connection conexion = DriverManager.getConnection(URL);
-         Statement stmt = conexion.createStatement();
-         ResultSet rs = stmt.executeQuery(sql)) {
-        boolean primero = true;
-        while (rs.next()) {
-            if (!primero) sb.append(",");
-            String descripcion = rs.getString("descripcion");
-            if (descripcion == null) descripcion = "";
-            sb.append("{")
-                .append("\"id\":").append(rs.getInt("id")).append(",")
-                .append("\"titulo\":\"").append(rs.getString("titulo")).append("\",")
-                .append("\"descripcion\":\"").append(descripcion).append("\",")
-                .append("\"imagen\":\"").append(rs.getString("imagen")).append("\",")
-                .append("\"fecha\":\"").append(rs.getString("fecha")).append("\"")
-                .append("}");
-            primero = false;
-        }
-    } catch (SQLException e) {
-        System.out.println("Error al cargar comunidad: " + e.getMessage());
-    }
-    sb.append("]");
-    return sb.toString();
 }
 public static Voluntario obtenerCompanero(int idVoluntario) {
     String sql = "SELECT v.id, v.nombre, v.ciudad, v.fechaUnion, v.correo, v.celular, v.horarioDiaMes " +

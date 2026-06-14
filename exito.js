@@ -2,36 +2,43 @@ const datos = JSON.parse(localStorage.getItem('resultadoVoluntario'));
 if (datos) {
     document.getElementById('localidad-seleccionada').textContent = datos.localidad;
     const contenedorTabla = document.getElementById('contenedor-tabla-companeros');
-    if (datos.match && datos.companeros && datos.companeros.length > 0) {
+ if (datos.match && datos.companeros) {
+    const listaCompaneros = new ListaEnlazada();
+    let idx = 0;
+    function cargarCompaneros(companeros) {
+        if (idx >= companeros.length) return;
+        listaCompaneros.insertar(companeros[idx]);
+        idx++;
+        cargarCompaneros(companeros);
+    }
+    cargarCompaneros(datos.companeros);
+
+    if (!listaCompaneros.estaVacia()) {
         let filas = '';
-        datos.companeros.forEach(comp => {
+        function generarFilas(nodo) {
+            if (!nodo) return;
             filas += `
                 <tr>
-                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${comp.nombre}</td>
-                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${comp.celular}</td>
-                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${comp.correo}</td>
-                </tr>
-            `;
-        });
+                    <td style="padding:10px;border:1px solid #ddd;text-align:center;">${nodo.dato.nombre}</td>
+                    <td style="padding:10px;border:1px solid #ddd;text-align:center;">${nodo.dato.celular}</td>
+                    <td style="padding:10px;border:1px solid #ddd;text-align:center;">${nodo.dato.correo}</td>
+                </tr>`;
+            generarFilas(nodo.siguiente);
+        }
+        generarFilas(listaCompaneros.cabeza);
         contenedorTabla.innerHTML = `
-            <table class="tabla-companeros" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+            <table class="tabla-companeros" style="width:100%;border-collapse:collapse;margin-top:10px;">
                 <thead>
-                    <tr style="background-color: #f2eb2b; color: white;">
-                        <th style="padding: 10px; border: 1px solid #ddd;">Nombre</th>
-                        <th style="padding: 10px; border: 1px solid #ddd;">Celular</th>
-                        <th style="padding: 10px; border: 1px solid #ddd;">Correo</th>
+                    <tr style="background-color:#f2eb2b;color:white;">
+                        <th style="padding:10px;border:1px solid #ddd;">Nombre</th>
+                        <th style="padding:10px;border:1px solid #ddd;">Celular</th>
+                        <th style="padding:10px;border:1px solid #ddd;">Correo</th>
                     </tr>
                 </thead>
                 <tbody>${filas}</tbody>
-            </table>
-        `;
-    } else {
-        contenedorTabla.innerHTML = `
-            <p style="color: #666; padding: 10px; background: #eefaf8; border-radius: 4px; border-left: 4px solid #3bc42e;">
-                Por el momento eres el primer voluntario en esta zona. ¡Pronto te asignaremos un compañero!
-            </p>
-        `;
+            </table>`;
     }
+} 
 }
 
 document.querySelector('.salir').addEventListener('click', async function() {

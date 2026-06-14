@@ -1,25 +1,29 @@
 window.addEventListener('DOMContentLoaded', () => {
 
-    // ── Función helper: convierte un <select> nativo en select-custom ──
     function convertirSelectCustom(selectId, contenedorId, onChange) {
         const selectNativo = document.getElementById(selectId);
         if (!selectNativo) return;
 
-        // Recoger opciones del select nativo (saltando la disabled)
-        const opciones = Array.from(selectNativo.options)
-            .filter(o => !o.disabled)
-            .map(o => ({ valor: o.value, texto: o.text }));
+        const opciones = new ListaEnlazada();
+        let placeholder = 'Seleccione una opción...';
 
-        const placeholder = Array.from(selectNativo.options).find(o => o.disabled)?.text
-            || 'Seleccione una opción...';
+        function cargarOpciones(options, idx) {
+            if (idx >= options.length) return;
+            const o = options[idx];
+            if (o.disabled) {
+                placeholder = o.text;
+            } else {
+                opciones.insertar({ valor: o.value, texto: o.text });
+            }
+            cargarOpciones(options, idx + 1);
+        }
+        cargarOpciones(selectNativo.options, 0);
 
-        // Ocultar select nativo y quitarle required para que no bloquee el submit
         selectNativo.style.display = 'none';
         selectNativo.removeAttribute('required');
 
         const contenedor = document.getElementById(contenedorId) || selectNativo.parentElement;
-
-        const wrapper = document.createElement('div');
+        const wrapper    = document.createElement('div');
         wrapper.className = 'select-custom';
 
         const selected = document.createElement('div');
@@ -30,16 +34,24 @@ window.addEventListener('DOMContentLoaded', () => {
         lista.className = 'select-opciones';
 
         const inputOculto = document.createElement('input');
-        inputOculto.type = 'hidden';
-        inputOculto.name = selectNativo.name;
+        inputOculto.type  = 'hidden';
+        inputOculto.name  = selectNativo.name;
         inputOculto.value = '';
 
-        opciones.forEach(op => {
+        function agregarOpcionSelect(nodo) {
+            if (!nodo) return;
+            const op = nodo.dato;
             const li = document.createElement('li');
-            li.textContent = op.texto;
+            li.textContent   = op.texto;
             li.dataset.valor = op.valor;
-            li.addEventListener('click', function () {
-                lista.querySelectorAll('li').forEach(i => i.classList.remove('seleccionado'));
+            li.addEventListener('click', function() {
+                const items = lista.querySelectorAll('li');
+                function limpiarSeleccion(items, idx) {
+                    if (idx >= items.length) return;
+                    items[idx].classList.remove('seleccionado');
+                    limpiarSeleccion(items, idx + 1);
+                }
+                limpiarSeleccion(items, 0);
                 this.classList.add('seleccionado');
                 selected.textContent = this.textContent;
                 selected.classList.remove('abierto');
@@ -48,9 +60,11 @@ window.addEventListener('DOMContentLoaded', () => {
                 if (onChange) onChange(this.dataset.valor);
             });
             lista.appendChild(li);
-        });
+            agregarOpcionSelect(nodo.siguiente);
+        }
+        agregarOpcionSelect(opciones.cabeza);
 
-        selected.addEventListener('click', function (e) {
+        selected.addEventListener('click', function(e) {
             e.stopPropagation();
             const estaAbierto = lista.classList.contains('abierto');
             cerrarTodosLosSelects();
@@ -63,62 +77,82 @@ window.addEventListener('DOMContentLoaded', () => {
         wrapper.appendChild(selected);
         wrapper.appendChild(lista);
         wrapper.appendChild(inputOculto);
-
-        // Insertar justo después del select nativo
         selectNativo.insertAdjacentElement('afterend', wrapper);
 
-        return inputOculto; // retorna referencia para leer el valor luego
+        return inputOculto;
     }
 
     function cerrarTodosLosSelects() {
-        document.querySelectorAll('.select-selected').forEach(s => s.classList.remove('abierto'));
-        document.querySelectorAll('.select-opciones').forEach(s => s.classList.remove('abierto'));
+        const selects  = document.querySelectorAll('.select-selected');
+        const opciones = document.querySelectorAll('.select-opciones');
+        function limpiar(items, idx) {
+            if (idx >= items.length) return;
+            items[idx].classList.remove('abierto');
+            limpiar(items, idx + 1);
+        }
+        limpiar(selects, 0);
+        limpiar(opciones, 0);
     }
 
     document.addEventListener('click', cerrarTodosLosSelects);
-    convertirSelectCustom('distrito',      'select-distrito');
-    convertirSelectCustom('vivienda',      'select-vivienda', function(valor) {
+
+    convertirSelectCustom('distrito',     'select-distrito');
+    convertirSelectCustom('vivienda',     'select-vivienda', function(valor) {
         document.getElementById('vivienda_otro').style.display =
             valor === 'otro' ? 'block' : 'none';
     });
-    convertirSelectCustom('tiempo',        'select-tiempo');
-    convertirSelectCustom('tipo_mascota',  'select-tipo-mascota');
+    convertirSelectCustom('tiempo',       'select-tiempo');
+    convertirSelectCustom('tipo_mascota', 'select-tipo-mascota');
 
     document.getElementById('vivienda_otro').style.display = 'none';
+
     let mascotaValorInput = null;
 
     fetch('https://pancitallena.onrender.com/perros')
         .then(r => r.json())
         .then(perros => {
-            const disponibles = perros.filter(p => p.estado === 'Disponible');
+            const disponibles = new ListaEnlazada();
+            function filtrarDisponibles(data, idx) {
+                if (idx >= data.length) return;
+                if (data[idx].estado === 'Disponible') disponibles.insertar(data[idx]);
+                filtrarDisponibles(data, idx + 1);
+            }
+            filtrarDisponibles(perros, 0);
 
             const selectNativo = document.getElementById('mascota_elegida');
             selectNativo.style.display = 'none';
             selectNativo.removeAttribute('required');
 
             const contenedor = document.getElementById('select-mascota');
-
-            const wrapper = document.createElement('div');
+            const wrapper    = document.createElement('div');
             wrapper.className = 'select-custom';
 
             const selected = document.createElement('div');
-            selected.className = 'select-selected';
+            selected.className   = 'select-selected';
             selected.textContent = 'Seleccione una opción...';
 
             const lista = document.createElement('ul');
             lista.className = 'select-opciones';
 
-            mascotaValorInput = document.createElement('input');
-            mascotaValorInput.type = 'hidden';
-            mascotaValorInput.name = 'Mascota_Elegida';
+            mascotaValorInput       = document.createElement('input');
+            mascotaValorInput.type  = 'hidden';
+            mascotaValorInput.name  = 'Mascota_Elegida';
             mascotaValorInput.value = '';
 
-            disponibles.forEach(p => {
+            function agregarOpcion(nodo) {
+                if (!nodo) return;
+                const p  = nodo.dato;
                 const li = document.createElement('li');
-                li.textContent = p.nombre;
+                li.textContent   = p.nombre;
                 li.dataset.valor = p.nombre;
-                li.addEventListener('click', function () {
-                    lista.querySelectorAll('li').forEach(i => i.classList.remove('seleccionado'));
+                li.addEventListener('click', function() {
+                    const items = lista.querySelectorAll('li');
+                    function limpiarSeleccion(items, idx) {
+                        if (idx >= items.length) return;
+                        items[idx].classList.remove('seleccionado');
+                        limpiarSeleccion(items, idx + 1);
+                    }
+                    limpiarSeleccion(items, 0);
                     this.classList.add('seleccionado');
                     selected.textContent = this.textContent;
                     selected.classList.remove('abierto');
@@ -126,9 +160,11 @@ window.addEventListener('DOMContentLoaded', () => {
                     mascotaValorInput.value = this.dataset.valor;
                 });
                 lista.appendChild(li);
-            });
+                agregarOpcion(nodo.siguiente);
+            }
+            agregarOpcion(disponibles.cabeza);
 
-            selected.addEventListener('click', function (e) {
+            selected.addEventListener('click', function(e) {
                 e.stopPropagation();
                 const estaAbierto = lista.classList.contains('abierto');
                 cerrarTodosLosSelects();
@@ -143,15 +179,18 @@ window.addEventListener('DOMContentLoaded', () => {
             wrapper.appendChild(mascotaValorInput);
             contenedor.appendChild(wrapper);
 
-            // Preseleccionar si viene por URL
             const urlParams = new URLSearchParams(window.location.search);
-            const animal = urlParams.get('animal');
+            const animal    = urlParams.get('animal');
             if (animal) {
                 mascotaValorInput.value = animal;
-                selected.textContent = animal;
-                lista.querySelectorAll('li').forEach(li => {
-                    if (li.dataset.valor === animal) li.classList.add('seleccionado');
-                });
+                selected.textContent    = animal;
+                const items = lista.querySelectorAll('li');
+                function preseleccionar(items, idx) {
+                    if (idx >= items.length) return;
+                    if (items[idx].dataset.valor === animal) items[idx].classList.add('seleccionado');
+                    preseleccionar(items, idx + 1);
+                }
+                preseleccionar(items, 0);
             }
         })
         .catch(() => {
@@ -162,14 +201,12 @@ window.addEventListener('DOMContentLoaded', () => {
             contenedor.appendChild(msg);
         });
 
-    // ── Archivo ──
-    document.getElementById('archivo_input').addEventListener('change', function () {
+    document.getElementById('archivo_input').addEventListener('change', function() {
         document.getElementById('nombre_archivo').textContent =
             this.files[0] ? this.files[0].name : 'Ningún archivo seleccionado';
     });
 
-    // ── Submit ──
-    document.querySelector('.form_adopcion').addEventListener('submit', function (e) {
+    document.querySelector('.form_adopcion').addEventListener('submit', function(e) {
         e.preventDefault();
 
         const mascota = mascotaValorInput ? mascotaValorInput.value : '';
@@ -225,15 +262,32 @@ window.addEventListener('DOMContentLoaded', () => {
             fecha:    new Date().toLocaleDateString()
         }));
 
-        // Construir FormData sin el archivo (Formspree plan gratuito no permite archivos)
-        const formData = new FormData();
-        for (const [key, value] of new FormData(this).entries()) {
+        const formData       = new FormData();
+        const rawFormData    = new FormData(this);
+        const formDataLista  = new ListaEnlazada();
+
+        function cargarEntradas(keys, idx) {
+            if (idx >= keys.length) return;
+            const key   = keys[idx];
+            const value = rawFormData.get(key);
+            formDataLista.insertar({ key, value });
+            cargarEntradas(keys, idx + 1);
+        }
+        const keys = Object.keys(Object.fromEntries(rawFormData));
+        cargarEntradas(keys, 0);
+
+        function procesarEntradas(nodo) {
+            if (!nodo) return;
+            const key   = nodo.dato.key;
+            const value = nodo.dato.value;
             if (value instanceof File) {
                 if (value.name) formData.append('Certificado_Nombre', value.name);
-                continue;
+            } else {
+                formData.append(key, value);
             }
-            formData.append(key, value);
+            procesarEntradas(nodo.siguiente);
         }
+        procesarEntradas(formDataLista.cabeza);
         formData.set('Mascota_Elegida', mascota);
 
         fetch(this.action, {
@@ -250,29 +304,4 @@ window.addEventListener('DOMContentLoaded', () => {
         })
         .catch(() => alert('Error de conexión.'));
     });
-});
-document.querySelector('form').addEventListener('submit', async function(e) {
-    e.preventDefault();
-
-    const datos = {
-        mascota: document.getElementById('mascota_elegida').value,
-        nombre: document.getElementById('nombre').value,
-        correo: document.getElementById('email').value,
-        telefono: document.getElementById('telefono').value,
-        fecha: new Date().toLocaleDateString('es-PE')
-    };
-
-    // Enviar a Formspree
-    const respuesta = await fetch('https://formspree.io/f/mlgkgnqq', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(datos)
-    });
-
-    if (respuesta.ok) {
-        sessionStorage.setItem('solicitudAdopcion', JSON.stringify(datos));
-        window.location.href = 'espera.html';
-    } else {
-        alert('Hubo un error al enviar. Inténtalo de nuevo.');
-    }
 });
