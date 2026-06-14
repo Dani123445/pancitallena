@@ -32,14 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('donacionActual', JSON.stringify(datos));
             const formData = new FormData(document.getElementById('form-donacion'));
             formData.set('metodo_pago', metodo);
-            fetch('https://formspree.io/f/mlgkgnqq', {
-                method: 'POST',
-                body: formData,
-                headers: { 'Accept': 'application/json' }
-            }).catch(() => {}); 
             window.location.href = 'confirmacion.html';
         }
-
+ 
         fetch('https://pancitallena.onrender.com/donar', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
