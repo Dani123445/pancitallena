@@ -34,6 +34,7 @@ public class pancitallena {
             servidor.createContext("/subir-imagen",         new WebSubirImagenHandler());
             servidor.createContext("/voluntarios",  new WebVoluntariosHandler());
             servidor.createContext("/donaciones",   new WebDonacionesHandler());
+            servidor.createContext("/", new WebArchivosHandler());
             servidor.createContext("/comunidad", new WebComunidadHandler());
             servidor.setExecutor(null);
             servidor.start();
@@ -535,6 +536,30 @@ public class pancitallena {
         inicio += patron.length();
         int fin = json.indexOf("\"", inicio);
         return json.substring(inicio, fin);
+    }
+}
+static class WebArchivosHandler implements HttpHandler {
+    @Override
+    public void handle(HttpExchange exchange) throws IOException {
+        String ruta = exchange.getRequestURI().getPath();
+        if (ruta.equals("/")) ruta = "/index.html";
+        Path archivo = Paths.get(System.getProperty("user.dir") + ruta);
+        if (!Files.exists(archivo)) {
+            byte[] msg = "404 Not Found".getBytes();
+            exchange.sendResponseHeaders(404, msg.length);
+            exchange.getResponseBody().write(msg);
+            exchange.getResponseBody().close();
+            return;
+        }
+        String tipo = ruta.endsWith(".html") ? "text/html" :
+                      ruta.endsWith(".css")  ? "text/css" :
+                      ruta.endsWith(".js")   ? "application/javascript" :
+                      "application/octet-stream";
+        byte[] bytes = Files.readAllBytes(archivo);
+        exchange.getResponseHeaders().set("Content-Type", tipo);
+        exchange.sendResponseHeaders(200, bytes.length);
+        exchange.getResponseBody().write(bytes);
+        exchange.getResponseBody().close();
     }
 }
 }
