@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Panel Administrador - Pancita Llena</title>
+</head>
+<body>
+    <header>
+        <div class="navegation_bar">
+            <nav class="nav_container">
+                <img src="logo_t2.png" alt="PANCITA LLENA" class="logo">
+                <ul class="barra_nav">
+                    <li><a href="index.html#inicio1">CONÓCENOS</a></li>
+                    <li><a href="Adopcion.html">ADOPCIÓN</a></li>
+                    <li><a href="Donar.html">DONACIONES</a></li>
+                    <li><a href="Voluntariado.html">REGISTRO DE VOLUNTARIADO</a></li>
+                    <li><a href="Datos.html">COMUNIDAD</a></li>
+                </ul>
+                <button onclick="window.location.href='Donar.html'">¡DONAR AHORA!</button>
+            </nav>
+        </div>
+    </header>
+    <main class="formilario">
+        <div class="form_container">
+            <div id="panel-login">
+                <h2>Acceso Administrador</h2>
+                <div class="form_input">
+                    <input type="password" id="input-contrasena" placeholder="Contraseña" onkeydown="if(event.key==='Enter') verificarContrasena()">
+                </div>
+                <div class="button_container">
+                    <input type="button" value="Ingresar" onclick="verificarContrasena()">
+                </div>
+                <p id="error-login">Contraseña incorrecta.</p>
+            </div>
+            <div id="panel-admin" class="oculto">
+                <h2>Panel de Administrador</h2>
+                <p>Gestiona animales, voluntarios, donaciones y comunidad.</p>
+                <div class="tabs-container">
+                    <button id="tab-animales" class="btn-tab active" onclick="mostrarTab('animales')">Animales</button>
+                    <button id="tab-voluntarios" class="btn-tab" onclick="mostrarTab('voluntarios')">Voluntarios</button>
+                    <button id="tab-donaciones" class="btn-tab" onclick="mostrarTab('donaciones')">Donaciones</button>
+                    <button id="tab-arbol" class="btn-tab" onclick="mostrarTab('arbol')">Árbol BST</button>
+                    <button id="tab-comunidad" class="btn-tab" onclick="mostrarTab('comunidad')">Comunidad</button>
+                    <button class="btn-tab" onclick="cerrarSesion()">Cerrar sesión</button>
+                </div>
+
+                <div id="seccion-animales">
+                    <div class="fila">
+                        <button onclick="filtrar('todos')">Ver todos</button>
+                        <button onclick="filtrar('Disponible')">Disponibles</button>
+                        <button onclick="filtrar('En proceso')">En proceso</button>
+                        <button onclick="filtrar('Adoptado')">Adoptados</button>
+                        <button id="btn-mostrar-form" onclick="mostrarFormularioAgregar()">Agregar animal</button>
+                    </div>
+                    <div id="seccion-agregar" class="oculto">
+                        <h3>Registrar nuevo animal</h3>
+                        <div class="fila">
+                            <div class="campo">
+                                <label>ID único *</label>
+                                <input type="number" id="nuevo-id" placeholder="Ej: 10">
+                            </div>
+                            <div class="campo">
+                                <label>Tipo *</label>
+                                <select id="nuevo-tipo">
+                                    <option value="perro">Perro</option>
+                                    <option value="gato">Gato</option>
+                                </select>
+                            </div>
+                            <div class="campo">
+                                <label>Raza</label>
+                                <input type="text" id="nuevo-raza" placeholder="Mestizo">
+                            </div>
+                        </div>
+                        <div class="fila">
+                            <div class="campo">
+                                <label>Nombre / Apodo *</label>
+                                <input type="text" id="nuevo-nombre" placeholder="Rocky">
+                            </div>
+                        </div>
+                        <div class="fila">
+                            <div class="campo">
+                                <label>Descripción *</label>
+                                <textarea id="nuevo-descripcion" placeholder="Macho, 3 años, color café, cariñoso."></textarea>
+                            </div>
+                        </div>
+                        <div class="fila">
+                            <div class="campo">
+                                <label>Foto del animal *</label>
+                                <div class="upload-area" onclick="document.getElementById('nuevo-foto').click()">
+                                    <p>Haz clic para seleccionar una foto</p>
+                                    <p id="nombre-foto">Ningún archivo seleccionado</p>
+                                    <img id="preview-imagen" alt="Vista previa">
+                                </div>
+                                <input type="file" id="nuevo-foto" accept="image/*" class="oculto">
+                            </div>
+                        </div>
+                        <div class="acciones">
+                            <button id="btn-guardar-animal" onclick="agregarAnimal()">Guardar animal</button>
+                            <button onclick="cancelarAgregar()">Cancelar</button>
+                        </div>
+                    </div>
+                    <div id="contenedor-animales"></div>
+                </div>
+
+                <div id="seccion-voluntarios" class="oculto">
+                    <h3>Lista de Voluntarios</h3>
+                    <div id="contenedor-voluntarios"></div>
+                </div>
+
+                <div id="seccion-donaciones" class="oculto">
+                    <h3>Pila de Donaciones</h3>
+                    <div id="contenedor-donaciones"></div>
+                </div>
+
+                <div id="seccion-arbol" class="oculto">
+                    <h3>Árbol BST de Animales</h3>
+                    <div id="contenedor-arbol" style="overflow-x:auto;"></div>
+                </div>
+
+                <div id="seccion-comunidad" class="oculto">
+                    <h3>Galería Comunidad</h3>
+                    <div class="fila">
+                        <button id="btn-mostrar-form-comunidad" onclick="mostrarFormularioComunidad()">Agregar imagen</button>
+                    </div>
+                    <div id="seccion-agregar-comunidad" class="oculto">
+                        <h3>Nueva imagen para Comunidad</h3>
+                        <div class="fila">
+                            <div class="campo">
+                                <label>Título *</label>
+                                <input type="text" id="comunidad-titulo" placeholder="Ej: Jornada de esterilización 2026">
+                            </div>
+                        </div>
+                        <div class="fila">
+                            <div class="campo">
+                                <label>Descripción</label>
+                                <textarea id="comunidad-descripcion" placeholder="Breve descripción de la actividad o momento..."></textarea>
+                            </div>
+                        </div>
+                        <div class="fila">
+                            <div class="campo">
+                                <label>Imagen *</label>
+                                <div class="upload-area" onclick="document.getElementById('comunidad-foto').click()">
+                                    <p>Haz clic para seleccionar una foto</p>
+                                    <p id="comunidad-nombre-foto">Ningún archivo seleccionado</p>
+                                    <img id="comunidad-preview" alt="Vista previa">
+                                </div>
+                                <input type="file" id="comunidad-foto" accept="image/*" class="oculto">
+                            </div>
+                        </div>
+                        <div class="acciones">
+                            <button id="btn-guardar-comunidad" onclick="agregarImagenComunidad()">Guardar imagen</button>
+                            <button onclick="cancelarComunidad()">Cancelar</button>
+                        </div>
+                    </div>
+                    <div id="contenedor-comunidad"></div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>© 2026 Pancita Llena. Todos los derechos reservados.</p>
+    </footer>
+    <script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Confirmación de Donación - Pancita Llena</title>
+</head>
+<body>
+    <header>
+        <div class="navegation_bar">
+            <nav class="nav_container">
+                <img src="logo_t2.png" alt="PANCITA LLENA" class="logo">
+                <ul class="barra_nav">
+                    <li><a href="index.html#inicio1">CONÓCENOS</a></li>
+                    <li><a href="Adopcion.html">ADOPCIÓN</a></li>
+                    <li><a href="Donar.html">DONACIONES</a></li>
+                    <li><a href="Voluntariado.html">REGISTRO DE VOLUNTARIADO</a></li>
+                    <li><a href="Datos.html">COMUNIDAD</a></li>
+                </ul>
+                <button class="btn-donar" onclick="window.location.href='Donar.html'">¡DONAR AHORA!</button>
+            </nav>
+        </div>
+    </header>
+    <main class="formilario">
+        <div class="form_container">
+            <div class="bienvenida_container">
+                <h2>¡Gracias por tu donación! </h2>
+                <p>"Tu generosidad cambia vidas."</p>
+                <div class="companeros_locales">
+                    <h3>Código de validación generado:</h3>
+                    <div id="cip-container">
+                        <p id="cip-numero"></p>
+                        <p class="nota-cip">Guarda este código como comprobante de tu donación</p>
+                    </div>
+                    <div id="resumen-donacion"></div>
+                    <div class="acciones-container">
+                        <button class="btn-exportar" onclick="exportarHistorial()">Exportar historial</button>
+                        <button class="btn-historial" onclick="verHistorial()"> Ver mi historial</button>
+                        <button class="btn-donar" onclick="window.location.href='Donar.html'"> Seguir donando</button>
+                    </div>
+                    <div id="historial-container" style="display:none; margin-top:25px;">
+                        <h3>Mi historial de donaciones:</h3>
+                        <div id="tabla-historial"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>© 2026 Pancita Llena. Todos los derechos reservados.</p>
+    </footer>
+    <script src="confirmacion.js"></script>
+</body>
+</html>

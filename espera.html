@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Solicitud en proceso - Pancita Llena</title>
+</head>
+<body>
+    <header>
+        <div class="navegation_bar">
+            <nav class="nav_container">
+                <img src="logo_t2.png" alt="PANCITA LLENA" class="logo">
+                <ul class="barra_nav">
+                    <li><a href="index.html#inicio1">CONÓCENOS</a></li>
+                    <li><a href="Adopcion.html">ADOPCIÓN</a></li>
+                    <li><a href="Donar.html">DONACIONES</a></li>
+                    <li><a href="Voluntariado.html">REGISTRO DE VOLUNTARIADO</a></li>
+                    <li><a href="Datos.html">COMUNIDAD</a></li>
+                </ul>
+                <button onclick="window.location.href='Donar.html'">¡DONAR AHORA!</button>
+            </nav>
+        </div>
+    </header>
+    <main class="formilario">
+        <div class="form_container">
+            <div class="bienvenida_container">
+                <h2>¡Solicitud enviada con éxito!</h2>
+                <p>"Cada animal adoptado es una vida transformada."</p>
+                <div class="companeros_locales">
+                    <h3>Estado de tu solicitud:</h3>
+                    <div id="estado-solicitud">
+                        <p class="estado-badge en-proceso">⏳ En proceso de revisión</p>
+                        <p class="descripcion-estado">
+                            Hemos recibido tu solicitud de adopción. Nuestro equipo la está revisando 
+                            y te contactará pronto al correo y teléfono que registraste.
+                        </p>
+                    </div>
+                    <div class="resumen-solicitud" id="resumen-solicitud"></div>
+                </div>
+                <div class="acciones-finales">
+                    <button onclick="window.location.href='perritos.html'">
+                        Ver más animales
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>© 2026 Pancita Llena. Todos los derechos reservados.</p>
+    </footer>
+    <script src="espera.js"></script>
+</body>
+</html>

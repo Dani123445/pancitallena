@@ -1,0 +1,14 @@
+{
+    "java.project.referencedLibraries": {
+        "include": [
+            "lib/**/*.jar",
+            "c:\\Users\\q\\Downloads\\jakarta.servlet-api-6.0.0.jar",
+            "c:\\Users\\q\\Downloads\\gson-2.10.1.jar"
+        ],
+        "exclude": [
+            "c:\\Users\\q\\Downloads\\gson-2.10.1-javadoc.jar",
+            "c:\\Users\\q\\Downloads\\jakarta.servlet-api-6.0.0-javadoc.jar"
+        ]
+    },
+    "liveServer.settings.port": 5501
+}

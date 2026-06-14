@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>REGISTRO DE VOLUNTARIADO</title>
+</head>
+<body>
+    <header>
+        <div class="navegation_bar">
+            <nav class="nav_container">
+                <img src="logo_t2.png" alt="PANCITA LLENA" class="logo">
+                <ul class="barra_nav">
+                        <li><a href="index.html#inicio1">CONÓCENOS</a></li>
+                        <li><a href="Adopcion.html">ADOPCIÓN</a></li>
+                        <li><a href="Donar.html">DONACIONES</a></li>
+                        <li><a href="Voluntariado.html">REGISTRO DE VOLUNTARIADO</a></li>
+                        <li><a href="Datos.html">COMUNIDAD</a></li>
+                </ul>
+                <button onclick="window.location.href='Donar.html'">¡DONAR AHORA!</button>
+            </nav>
+        </div>
+    </header>
+<form action="https://formspree.io/f/mlgkgnqq" method="POST" class="form_voluntario">
+    <main class="formilario">
+        <div class="title">
+            <h1><strong>Registro de Voluntariado</strong></h1>
+            <p>¡Únete a nuestro equipo de voluntarios y haz una diferencia en la vida de los animales necesitados!</p>
+        </div>
+        <div class="form_container">
+            <div id="contenedor-formulario-principal">
+                <section class="Información_registro">
+                    <div class="Datos_Personales">
+                        <h2><strong>Datos Personales</strong></h2>
+                        <div class="form_input">
+                            <input type="text" id="dni" placeholder="DNI (8 dígitos)" maxlength="8">
+                        </div>
+                        <div class="form_input">
+                            <input type="text" id="nombre" placeholder="Nombre Completo">
+                        </div>
+                        <div class="form_input">
+                            <input type="number" id="edad" placeholder="Edad">
+                        </div>
+                        <div class="form_input">
+                            <input type="email" id="email" placeholder="Correo Electrónico">
+                        </div>
+                        <div class="form_input">
+                            <input type="text" id="telefono" placeholder="Número de Teléfono">
+                        </div>
+                        <div class="form_input">
+                            <label><strong>¿Cuál es su localidad de residencia? </strong></label>
+                            <div id="select-localidad">
+                                <option value="" disabled selected>Seleccione una opción...</option>
+                            </div>
+                        </div>
+                        <div class="form_input">
+                            <input type="text" id="ocupacion" placeholder="Tu ocupación">
+                        </div>
+                        
+                        <div class="form_input">
+                            <label><strong>¿Qué días tienes disponible?</strong></label>
+                            <div class="checkbox_group">
+                                <label><input type="checkbox" class="dia-check" value="Lunes"> Lunes</label>
+                                <label><input type="checkbox" class="dia-check" value="Martes"> Martes</label>
+                                <label><input type="checkbox" class="dia-check" value="Miercoles"> Miércoles</label>
+                                <label><input type="checkbox" class="dia-check" value="Jueves"> Jueves</label>
+                                <label><input type="checkbox" class="dia-check" value="Viernes"> Viernes</label>
+                                <label><input type="checkbox" class="dia-check" value="Sabado"> Sábado</label>
+                                <label><input type="checkbox" class="dia-check" value="Domingo"> Domingo</label>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div id="select-disponibilidad">
+                                <option value="" disabled selected>¿En qué horarios se encuentra disponible?</option>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <div class="Sobre_ti">
+                    <h2><strong>Cuéntanos un poco sobre ti</strong></h2>
+                    <div class="form_input">
+                        <textarea id="sobre_ti" placeholder="Cuéntanos sobre tu experiencia..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="button_container">
+                    <input type="button" value="Enviar Registro" onclick="procesarRegistro(event)">
+                </div>
+            </div>
+        </div>
+    </main>
+</form>
+    <footer>
+        <p>© 2026 Pancita Llena. Todos los derechos reservados.</p>
+    </footer>
+     <script src="select-custom.js"></script>
+    <script src="voluntariado.js"></script>
+</body>
+</html>

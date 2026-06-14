@@ -1,0 +1,19 @@
+# Base de datos
+*.db
+
+# Archivos compilados
+out/
+*.class
+
+# Librerías
+lib/
+
+# Imágenes
+*.png
+*.jpg
+*.jpeg
+
+# Variables de entorno
+.env
+
+

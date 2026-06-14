@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>DONAR</title>
+</head>
+<body>
+    <header>
+        <div class="navegation_bar">
+            <nav class="nav_container">
+                <img src="logo_t2.png" alt="PANCITA LLENA" class="logo">
+            <ul class="barra_nav">
+                    <li><a href="#index.html">CONÓCENOS</a></li>
+                    <li><a href="Adopcion.html">ADOPCIÓN</a></li>
+                    <li><a href="Donar.html">DONACIONES</a></li>
+                    <li><a href="Voluntariado.html">REGISTRO DE VOLUNTARIADO</a></li>
+                    <li><a href="Datos.html">COMUNIDAD</a></li>
+            </ul>
+                <a href="Donar.html">
+                    <button>¡DONAR AHORA!</button>
+                </a>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <p class="vaucher">
+            El voucher debe mostrar claramente el número destino, 
+            monto y fecha. Comprobantes inválidos serán rechazados.
+        </p>
+        <section class="donar">
+            <div class="donar_container">
+<form action="https://formspree.io/f/mlgkgnqq" method="POST" enctype="multipart/form-data" class="form_donar">
+        <h1>¡Bienvenido a la sección donación!</h1>
+    <p>Tu donación ayudará a alimentar y cuidar a los animales necesitados.</p> 
+    <div class="input_nombre">
+        <input type="text" id="nombre" name="nombre" placeholder="Nombre Completo" required>
+    </div>
+    <div class="input_email">
+        <input type="email" id="email" name="email" placeholder="Correo Electrónico" required>
+    </div>
+    <div class="input_telefono">
+        <input type="text" id="telefono" name="telefono" placeholder="Número de Teléfono" required> 
+    </div>
+    <div class="input_monto">
+        <div class="soles_monto"><span>S/</span></div>
+        <div class="cantidad_monto">
+            <input type="number" id="monto" name="monto" placeholder="Monto" min="0.10" step="0.10" required>
+        </div>
+        <div class="unidad_monto"><span>PEN</span></div>
+    </div>
+    <div class="input_pago">
+        <label>Método de Pago:</label>
+        <div id="select-metodo-pago"></div>
+    </div>
+    <div class="info_pago" id="info-yape" style="display:none;">
+        <p><strong>Número Yape:</strong> 928691770 <br> Danitza Sal.</p>
+    </div>
+    <div class="info_pago" id="info-transferencia" style="display:none;">
+        <p><strong>N° de cuenta:</strong> 00360001348088192845 <br> Danitza Saldaña. P </p>
+    </div>
+    <div class="capturayape">
+        <label>Sube el voucher de tu pago:</label>
+        <div class="file-wrapper">
+                    <input type="file" id="captura_pago" name="captura_pago" accept="image/png, image/jpg, image/jpeg" required>
+                    <label for="captura_pago" class="custom-file-upload">Seleccionar archivo</label>
+                    <span id="file-chosen">No se ha seleccionado archivo</span>
+                </div>
+                </div>
+                <button type="submit" class="btndonar">Registrar Donación</button>
+            </form>
+        </section>  
+    </main>
+    <footer>
+        <div class="footer_container">
+            <p>© 2026 PANCITA LLENA. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+    <script src="select-custom.js"></script>
+    <script src="pago.js"></script>
+</body>
+</html>

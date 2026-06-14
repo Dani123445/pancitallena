@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>ADOPCIÓN</title>
+</head>
+<body>
+    <header>
+        <div class="navegation_bar">
+            <nav class="nav_container">
+                <img src="logo_t2.png" alt="PANCITA LLENA" class="logo">
+                <ul class="barra_nav">
+                <li><a href="index.html#inicio1">CONÓCENOS</a></li>
+                <li><a href="Adopcion.html">ADOPCIÓN</a></li>
+                <li><a href="Donar.html">DONACIONES</a></li>
+                <li><a href="Voluntariado.html">REGISTRO DE VOLUNTARIADO</a></li>
+                <li><a href="Datos.html">COMUNIDAD</a></li>
+                </ul>
+                <a href="Donar.html">
+                    <button>¡DONAR AHORA!</button>
+                </a>
+            </nav>
+        </div>
+    </header>
+    <main class="fmr">
+        <section class="adopcion">
+            <h1>¡Bienvenido a al registro de adopción!</h1>
+            <h2 >Completa el siguiente formulario para iniciar tu proceso de adopción.</h2>
+<form action="https://formspree.io/f/mlgkgnqq" method="POST" class="form_adopcion">
+                    <fieldset>
+                    <legend>Selección de Mascota</legend>
+                    <div id="select-mascota">
+                        <label for="mascota_elegida">¿A qué animalito deseas adoptar?</label>
+                        <select id="mascota_elegida" name="Mascota_Elegida" required>
+                        <option value="" disabled selected>Cargando mascotas...</option>
+                        </select>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Información Personal</legend>
+                    <div class="form_input">
+                        <label for="dni">DNI:</label>
+                        <input type="text" id="dni" name="DNI" placeholder="Ingrese su DNI" pattern="[0-9]{8}"  maxlength="8" title="El DNI debe tener exactamente 8 números" required>    
+                    </div>
+                    <div class="input_nombre">
+                        <label for="nombre">Nombre Completo:</label>
+                        <input type="text" id="nombre" name="Nombre" placeholder="Ingrese su nombre completo" title="Ingrese su nombre completo" required>
+                    </div>
+                    <div class="input_edad">
+                        <label for="edad">Edad:</label>
+                        <input type="number" id="edad" name="Edad" placeholder="Ingrese su edad" min="18" title="Debe ser mayor de 18 años" required>
+                    </div>
+                    <div class="input_email">
+                        <label for="email">Correo Electrónico:</label>
+                        <input type="email" id="email" name="Email" placeholder="Ingrese su correo electrónico" required>
+                    </div>
+                    <div class="input_telefono">
+                        <label for="telefono">Número de Teléfono:</label>
+                        <input type="text" id="telefono" name="Telefono" placeholder="Ingrese su número de teléfono" pattern="[0-9]{9}" maxlength="9" title="El número de teléfono debe tener exactamente 9 números" required> 
+                    </div>
+                    <div id="select-distrito">
+                        <label for="distrito">Distrito de vivienda:</label>
+                        <select id="distrito" name="Distrito" required>
+                                <option value="" disabled selected>Seleccione una opción...</option>
+                                <option value="La Esperanza">La Esperanza</option>
+                                <option value="El Milagro">El Milagro</option>
+                                <option value="Trujillo (centro)">Trujillo (centro)</option>
+                                <option value="Florencia de Mora">Florencia de Mora</option>
+                                <option value="Víctor Larco Herrera">Víctor Larco Herrera</option>
+                                <option value="Moche">Moche</option>
+                                <option value="Salaverry">Salaverry</option>
+                                <option value="Huanchaco">Huanchaco</option>
+                                <option value="Laredo">Laredo</option>
+                        </select>
+                    </div>
+                    <div class="input_direccion">
+                        <label for="direccion">Dirección exacta:</label>
+                        <input type="text" id="direccion" name="Direccion" placeholder="Ingrese su dirección exacta" title="Ingrese su dirección exacta" required>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Entorno Familiar, Vivienda y Disponibilidad</legend>
+                    <div id="select-vivienda">
+                        <label for="vivienda">¿En qué tipo de vivienda vives?</label>
+                        <select id="vivienda" name="Vivienda" required>
+                            <option value="" disabled selected>Seleccione una opción...</option>
+                            <option value="casa_patio">Casa con patio</option>
+                            <option value="casa_sin_patio">Casa sin patio</option>
+                            <option value="departamento_grande">Departamento Grande</option>
+                            <option value="departamento_chico">Departamento Chico</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                        <input type="text" id="vivienda_otro" name="Vivienda_Otro" placeholder="Especifique el tipo de vivienda" title="Especifique el tipo de vivienda">
+                        <h4>Si vives en un departamento, describa las medidas de seguridad que has implementado para garantizar la seguridad de la mascota:</h4>
+                        <textarea id="seguridad_departamento" name="Seguridad_Departamento" placeholder="Describe las medidas de seguridad implementadas en tu departamento" title="Por favor, describe las medidas de seguridad implementadas en tu departamento"></textarea>
+                    </div>
+                    <div class="input_alquiler">
+                        <label for="alquiler">¿Vives en un lugar alquilado?</label>
+                        <input type="radio" id="alquiler_si" name="Alquiler" value="si" required>
+                        <label for="alquiler_si">Sí</label>
+                        <input type="radio" id="alquiler_no" name="Alquiler" value="no" required>
+                        <label for="alquiler_no">No</label>
+                        <h4>Si respondiste "Sí",¿Tu arrendador permite la vivienda de mascotas en su propiedad?</h4>
+                        <input type="radio" id="arrendador_si" name="Arrendador_Permite" value="si">
+                        <label for="arrendador_si">Sí</label>
+                        <input type="radio" id="arrendador_no" name="Arrendador_Permite" value="no">
+                        <label for="arrendador_no">No</label>
+                    </div>
+                    <div class="input_familiar">
+                        <label for="familiar">¿Vives con tu familia?</label>
+                        <input type="radio" id="familiar_si" name="Familiar" value="si" required>
+                        <label for="familiar_si">Sí</label>
+                        <input type="radio" id="familiar_no" name="Familiar" value="no" required>
+                        <label for="familiar_no">No</label>
+                        <h4>Si respondiste "Sí", describa la composición de tu familia y su actitud hacia las mascotas:</h4>
+                        <textarea id="composicion_familiar" name="Composicion_Familiar" placeholder="Describe la composición de tu familia y su actitud hacia las mascotas" title="Por favor, describe la composición de tu familia y su actitud hacia las mascotas"></textarea>
+                    </div>
+                    <div class="input_hijos">
+                        <label for="hijos">¿Tienes hijos?</label>
+                        <input type="radio" id="hijos_si" name="Hijos" value="si" required>
+                        <label for="hijos_si">Sí</label>
+                        <input type="radio" id="hijos_no" name="Hijos" value="no" required>
+                        <label for="hijos_no">No</label>
+                        <h4>Si respondiste "Sí", describa la edad de tus hijos y su experiencia previa con mascotas:</h4>
+                        <textarea id="hijos_experiencia" name="Hijos_Experiencia" placeholder="Describe la edad de tus hijos y su experiencia previa con mascotas" title="Por favor, describe la edad de tus hijos y su experiencia previa con mascotas"></textarea>
+                    </div>
+                    <div class="input_alergias">
+                        <label for="alergias">¿Alguien en tu hogar tiene alergias a los animales?</label>
+                        <input type="radio" id="alergias_si" name="Alergias" value="si" required>
+                        <label for="alergias_si">Sí</label>
+                        <input type="radio" id="alergias_no" name="Alergias" value="no" required>
+                        <label for="alergias_no">No</label>
+                        <h4>Si respondiste "Sí",describa la naturaleza de las alergias y las medidas que has tomado para manejarlas:</h4>
+                        <textarea id="alergias_detalle" name="Alergias_Detalle" placeholder="Describe la naturaleza de las alergias y las medidas que has tomado para manejarlas" title="Por favor, describe la naturaleza de las alergias y las medidas que has tomado para manejarlas"></textarea>
+                    </div>
+                    <div id="select-tiempo">
+                        <label for="tiempo">¿Cuánto tiempo pasas fuera de casa diariamente?</label>
+                        <select id="tiempo" name="Tiempo_Fuera" required>
+                            <option value="" disabled selected>Seleccione una opción...</option>
+                            <option value="menos_4_horas">Menos de 4 horas</option>
+                            <option value="entre_4_y_8_horas">Entre 4 y 8 horas</option>
+                            <option value="mas_8_horas">Más de 8 horas</option>
+                        </select>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Mascotas</legend>
+                    <div class="input_mascotas">
+                        <label for="mascotas">¿Actualmente tienes mascotas?</label>
+                        <input type="radio" id="mascotas_si" name="Mascotas" value="si" required>
+                        <label for="mascotas_si">Sí</label>
+                        <input type="radio" id="mascotas_no" name="Mascotas" value="no" required>
+                        <label for="mascotas_no">No</label>
+                        <h4>Si respondiste "Sí", describa las mascotas que tienes actualmente, incluyendo su tipo, raza, edad y cualquier información relevante sobre su comportamiento y salud:</h4>
+                        <textarea id="detalle_mascotas" name="Detalle_Mascotas" placeholder="Describe las mascotas que tienes actualmente, incluyendo su tipo, raza, edad y cualquier información relevante sobre su comportamiento y salud" title="Por favor, describe las mascotas que tienes actualmente"></textarea>
+                    </div>
+                    <div class="input_experiencia">
+                        <label for="experiencia">¿Tienes experiencia previa cuidando mascotas?</label>
+                        <input type="radio" id="experiencia_si" name="Experiencia" value="si" required>
+                        <label for="experiencia_si">Sí</label>
+                        <input type="radio" id="experiencia_no" name="Experiencia" value="no" required>
+                        <label for="experiencia_no">No</label>
+                        <h4>Describela:</h4>
+                        <textarea id="detalle_experiencia" name="Detalle_Experiencia" placeholder="Describe tu experiencia previa con mascotas" required title="Por favor, describe tu experiencia previa con mascotas"></textarea>
+                    </div>
+                    <div class="input_motivo">
+                        <label for="motivo">¿Cuál es tu motivo para querer adoptar una mascota?</label>
+                        <textarea id="motivo" name="Motivo_Adopcion" placeholder="Describe tu motivo para querer adoptar una mascota" required title="Por favor, describe tu motivo para querer adoptar una mascota"></textarea>
+                    </div>
+                    <div class="input_economia">
+                        <label for="economia">¿Consideras que tu situación económica es estable para asumir los gastos asociados a la tenencia de una mascota?</label>
+                        <input type="radio" id="economia_si" name="Economia" value="si" required>
+                        <label for="economia_si">Sí</label>
+                        <input type="radio" id="economia_no" name="Economia" value="no" required>
+                        <label for="economia_no">No</label>
+                        <h4>Si deseas, explica como puedes cubrir los gastos asociados a la tenencia de una mascota:</h4>
+                        <textarea id="detalle_economia" name="Detalle_Economia" placeholder="Describe cómo planeas cubrir los gastos asociados a la tenencia de una mascota" title="Por favor, describe cómo planeas cubrir los gastos asociados a la tenencia de una mascota"></textarea>
+                        <h4>Además, ¿tienes un plan para manejar emergencias médicas?</h4>
+                        <textarea id="detalle_emergencias" name="Detalle_Emergencias" placeholder="Describe tu plan para manejar emergencias médicas" title="Por favor, describe tu plan para manejar emergencias médicas"></textarea>
+                    </div>
+                    <div id="select-tipo-mascota">
+                        <label for="tipo_mascota">¿Qué tipo de mascota te gustaría adoptar?</label>
+                        <select id="tipo_mascota" name="Tipo_Mascota" required>
+                            <option value="" disabled selected>Seleccione una opción...</option>
+                            <option value="perro">Perro</option>
+                            <option value="gato">Gato</option>
+                        </select>
+                    </div>                  
+                </fieldset>
+                <div class="input_archivo">
+                <label for="certificado">Suba aquí su certificado de antecedentes:</label>
+                   <p class="nota-correo-certificado">
+                        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=pancitallena123xd@gmail.com&su=Certificado%20de%20Antecedentes%20-%20Adopci%C3%B3n" target="_blank">
+                            <svg class="icono-correo-inline" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="2"/>
+                                <path d="M2 6L12 13L22 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            pancitallena123xd@gmail.com
+                        </a>
+                    </p>
+            </div>
+                <div class="input_agreement">
+                    <input type="checkbox" id="agreement" name="Agreement" required>
+                    <label for="agreement">Acepto las visitas de seguimiento y la responsabilidad de cuidar a la mascota adoptada.</label>
+                </div>
+                <div class = "button_container">
+                    <input type="submit" value="Enviar Solicitud de Adopción">
+                </div>
+            </form>
+        </section>
+    </main>
+     <footer>
+        <div class="footer_container">
+            <p>© 2026 PANCITA LLENA. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+    <script src="script_adopcion.js"></script>
+</body>
+</html>
