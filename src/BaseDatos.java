@@ -220,7 +220,7 @@ public static void insertarAnimalesIniciales() {
     try (Connection conexion = DriverManager.getConnection(URL);
         Statement stmt = conexion.createStatement();
         ResultSet rs = stmt.executeQuery(sqlCheck)) {
-        if (rs.getInt(1) > 0) {
+        if (rs.next() && rs.getInt(1) > 0) {
             System.out.println("[Base de Datos] Animales ya existen, no se insertan.");
             return; 
         }
@@ -327,7 +327,7 @@ public static void insertarComunidadInicial() {
     try (Connection conexion = DriverManager.getConnection(URL);
          Statement stmt = conexion.createStatement();
          ResultSet rs   = stmt.executeQuery(sqlCheck)) {
-        if (rs.getInt(1) > 0) {
+        if (rs.next() && rs.getInt(1) > 0) {
             System.out.println("[Base de Datos] Comunidad ya tiene imágenes, no se insertan.");
             return;
         }
