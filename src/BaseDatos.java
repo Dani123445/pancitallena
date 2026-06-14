@@ -26,7 +26,7 @@ private static String buildUrl() {
 }
     public static void inicializarBD() {
         String sqlTablaVoluntarios = "CREATE TABLE IF NOT EXISTS voluntarios ("
-                + " id INTEGER PRIMARY KEY,"
+                + " id_historial SERIAL PRIMARY KEY,"
                 + " nombre TEXT NOT NULL,"
                 + " ciudad TEXT NOT NULL,"
                 + " fechaUnion TEXT NOT NULL,"
@@ -35,14 +35,14 @@ private static String buildUrl() {
                 + " horarioDiaMes TEXT NOT NULL,"
                 + " idAsociado INTEGER DEFAULT NULL"
                 + ");";
-        String sqlTablaHistorial = "CREATE TABLE IF NOT EXISTS historial ("
+              String sqlTablaHistorial = "CREATE TABLE IF NOT EXISTS historial ("
                 + " id_historial INTEGER PRIMARY KEY SERIAL,"
                 + " id_voluntario INTEGER NOT NULL,"
                 + " descripcion TEXT NOT NULL,"
                 + " fecha TEXT DEFAULT CURRENT_TIMESTAMP"
                 + ");";
-        String sqlTablaPerros = "CREATE TABLE IF NOT EXISTS perros ("
-                + " id INTEGER PRIMARY KEY,"
+              String sqlTablaPerros = "CREATE TABLE IF NOT EXISTS perros ("
+                + " id SERIAL PRIMARY KEY,"
                 + " nombre TEXT NOT NULL,"
                 + " raza TEXT,"
                 + " tipo TEXT,"
@@ -161,8 +161,8 @@ private static String buildUrl() {
 
 
 public static void guardarPerro(Perro p) {
-    String sql = "INSERT OR IGNORE INTO perros(id, nombre, raza, tipo, imagen, descripcion, estado) "
-            + "VALUES(?,?,?,?,?,?,?);";
+   String sql = "INSERT INTO perros(id, nombre, raza, tipo, imagen, descripcion, estado) "
+        + "ON CONFLICT (id) DO NOTHING ";
     try (Connection conexion = DriverManager.getConnection(URL);
         PreparedStatement pstmt = conexion.prepareStatement(sql)) {
         pstmt.setInt(1, p.getId());
