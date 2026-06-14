@@ -6,14 +6,20 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class BaseDatos {
-    private static final String URL = "jdbc:sqlite:/app/pancitallena.db";
-    static {
+   private static final String URL = System.getenv("DATABASE_URL") != null
+    ? System.getenv("DATABASE_URL").replace("postgresql://", "jdbc:postgresql://")
+    : "jdbc:sqlite:/app/pancitallena.db";
+   static {
+    try {
+        Class.forName("org.postgresql.Driver");
+    } catch (ClassNotFoundException e) {
         try {
             Class.forName("org.sqlite.JDBC");
-        } catch (ClassNotFoundException e) {
-            System.out.println("[CRÍTICO] No se encontró el driver de SQLite en las librerías referenciadas: " + e.getMessage());
+        } catch (ClassNotFoundException ex) {
+            System.out.println("[CRÍTICO] No se encontró driver: " + ex.getMessage());
         }
     }
+}
     public static void inicializarBD() {
         String sqlTablaVoluntarios = "CREATE TABLE IF NOT EXISTS voluntarios ("
                 + " id INTEGER PRIMARY KEY,"
