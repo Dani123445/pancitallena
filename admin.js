@@ -1,5 +1,6 @@
 let arbolAnimales = null; 
 let sesionActiva  = sessionStorage.getItem('adminSesion') === 'true';
+
 function crearNodoBST(a) {
     return { id: a.id, nombre: a.nombre, tipo: a.tipo,
              imagen: a.imagen, descripcion: a.descripcion,
@@ -19,8 +20,8 @@ function buscarBST(raiz, id) {
 }
 function eliminarBST(raiz, id) {
     if (!raiz) return null;
-    if (id < raiz.id)      { raiz.izquierda = eliminarBST(raiz.izquierda, id); return raiz; }
-    if (id > raiz.id)      { raiz.derecha   = eliminarBST(raiz.derecha,   id); return raiz; }
+    if (id < raiz.id)    { raiz.izquierda = eliminarBST(raiz.izquierda, id); return raiz; }
+    if (id > raiz.id)    { raiz.derecha   = eliminarBST(raiz.derecha,   id); return raiz; }
     if (!raiz.izquierda) return raiz.derecha;
     if (!raiz.derecha)   return raiz.izquierda;
     let sucesor = raiz.derecha;
@@ -33,13 +34,6 @@ function eliminarBST(raiz, id) {
     raiz.estado      = sucesor.estado;
     raiz.derecha     = eliminarBST(raiz.derecha, sucesor.id);
     return raiz;
-}
-function construirBSTdesdeJson(nodoJson) {
-    if (!nodoJson) return null;
-    return insertarBST(
-        insertarBST(null, crearNodoBST(nodoJson)),
-        null 
-    );
 }
 function insertarDesdeJson(raiz, nodoJson) {
     if (!nodoJson) return raiz;
@@ -71,9 +65,6 @@ function verificarContrasena() {
     .catch(() => alert('Error de conexión.'));
 }
 function mostrarTab(tab) {
-    document.getElementById('seccion-comunidad').style.display      = 'none';
-    document.getElementById('tab-comunidad').style.backgroundColor  = '#ccc';
-    document.getElementById('tab-comunidad').style.color            = '#333';
     document.getElementById('seccion-animales').style.display    = 'none';
     document.getElementById('seccion-voluntarios').style.display = 'none';
     document.getElementById('seccion-donaciones').style.display  = 'none';
@@ -86,6 +77,7 @@ function mostrarTab(tab) {
     document.getElementById('tab-donaciones').style.color            = '#333';
     document.getElementById('tab-arbol').style.backgroundColor       = '#ccc';
     document.getElementById('tab-arbol').style.color                 = '#333';
+
     if (tab === 'animales') {
         document.getElementById('seccion-animales').style.display        = 'block';
         document.getElementById('tab-animales').style.backgroundColor    = '#2ec4b6';
@@ -107,13 +99,7 @@ function mostrarTab(tab) {
         document.getElementById('tab-arbol').style.color                 = 'white';
         dibujarArbolEnPantalla();
     }
-    else if (tab === 'comunidad') {
-    document.getElementById('seccion-comunidad').style.display      = 'block';
-    document.getElementById('tab-comunidad').style.backgroundColor  = '#2ec4b6';
-    document.getElementById('tab-comunidad').style.color            = 'white';
-    cargarComunidad();
-}}
-
+}
 function cargarAnimales() {
     fetch('https://pancitallena.onrender.com/perros')
         .then(r => r.json())
@@ -363,12 +349,10 @@ function acumularSVG(nodo, nivel, xMin, xMax, svgRef) {
     const ANCHO = 160, ALTO = 55, SEP_V = 100;
     const xCentro = (xMin + xMax) / 2;
     const y = nivel * SEP_V + 40;
-
     const hojasIzq = contarHojas(nodo.izquierda);
     const hojasDer = contarHojas(nodo.derecha);
     const total    = hojasIzq + hojasDer;
     const xMid     = xMin + (xMax - xMin) * (hojasIzq / total);
-
     if (nodo.izquierda) {
         const xHijo = (xMin + xMid) / 2;
         const y2    = (nivel + 1) * SEP_V + 40 - ALTO / 2;
@@ -403,10 +387,11 @@ function generarSVGArbol(raiz) {
     if (!raiz) return '<p style="font-family:sans-serif;color:#888;">No hay animales registrados.</p>';
     const ANCHO = 160, SEP_V = 100;
     const totalHojas = contarHojas(raiz);
-    const svgAncho = totalHojas * ANCHO + 400 > 400 ? totalHojas * ANCHO + 400 : 400;    const altura     = calcularAltura(raiz);
+    const svgAncho   = totalHojas * ANCHO + 400 > 400 ? totalHojas * ANCHO + 400 : 400;
+    const altura     = calcularAltura(raiz);
     const svgAlto    = altura * SEP_V + 80;
     const svgRef     = { lineas: '', nodos: '' };
-acumularSVG(raiz, 0, 150, svgAncho - 150, svgRef);
+    acumularSVG(raiz, 0, 150, svgAncho - 150, svgRef);
     const leyenda = `
         <g transform="translate(10,${svgAlto - 30})">
             <rect x="0"   y="0" width="14" height="14" rx="3" fill="#28a745"/>
@@ -520,4 +505,3 @@ document.addEventListener('DOMContentLoaded', function() {
         mostrarTab('animales');
     }
 });
-
