@@ -5,8 +5,6 @@
 out/
 *.class
 
-# lib/
-
 # Imágenes
 *.png
 *.jpg
