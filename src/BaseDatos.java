@@ -11,19 +11,24 @@ public class BaseDatos {
 private static String buildUrl() {
     String dbUrl = System.getenv("DATABASE_URL");
     if (dbUrl == null) return "jdbc:sqlite:/app/pancitallena.db";
-    // Convertir formato postgres:// a jdbc:postgresql://
+    
     dbUrl = dbUrl.replace("postgresql://", "");
-    String[] partes = dbUrl.split("@");
-    String credenciales = partes[0]; // usuario:contraseña
-    String resto = partes[1];        // host/db
-    String[] cred = credenciales.split(":");
-    String usuario = cred[0];
-    String contrasena = cred[1];
-    String[] hostDb = resto.split("/");
-    String host = hostDb[0];
-    String db = hostDb[1];
+    
+    int arrobaIdx = dbUrl.indexOf("@");
+    String credenciales = dbUrl.substring(0, arrobaIdx);
+    String resto = dbUrl.substring(arrobaIdx + 1);
+    
+    int dospuntosIdx = credenciales.indexOf(":");
+    String usuario = credenciales.substring(0, dospuntosIdx);
+    String contrasena = credenciales.substring(dospuntosIdx + 1);
+    
+    int barraIdx = resto.indexOf("/");
+    String host = resto.substring(0, barraIdx);
+    String db = resto.substring(barraIdx + 1);
+    
     return "jdbc:postgresql://" + host + ":5432/" + db + "?user=" + usuario + "&password=" + contrasena + "&sslmode=require";
 }
+
     public static void inicializarBD() {
         String sqlTablaVoluntarios = "CREATE TABLE IF NOT EXISTS voluntarios ("
                 + " id INTEGER PRIMARY KEY,"
@@ -406,5 +411,26 @@ public static String obtenerComunidadJson() {
     }
     sb.append("]");
     return sb.toString();
+}
+public static Voluntario obtenerCompanero(int idVoluntario) {
+    String sql = "SELECT v.id, v.nombre, v.ciudad, v.fechaUnion, v.correo, v.celular, v.horarioDiaMes " +
+                 "FROM voluntarios v " +
+                 "INNER JOIN voluntarios v2 ON v2.idAsociado = v.id " +
+                 "WHERE v2.id = ?;";
+    try (Connection conexion = DriverManager.getConnection(URL);
+         PreparedStatement pstmt = conexion.prepareStatement(sql)) {
+        pstmt.setInt(1, idVoluntario);
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+            return new Voluntario(
+                rs.getInt("id"), rs.getString("nombre"), rs.getString("ciudad"),
+                rs.getString("fechaUnion"), rs.getString("correo"),
+                rs.getString("celular"), rs.getString("horarioDiaMes")
+            );
+        }
+    } catch (SQLException e) {
+        System.out.println("Error al obtener compañero: " + e.getMessage());
+    }
+    return null;
 }
 }

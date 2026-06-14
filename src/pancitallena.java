@@ -576,12 +576,8 @@ static class WebCompaneroHandler implements HttpHandler {
         String query = exchange.getRequestURI().getQuery();
         String jsonRespuesta;
         try {
-            int id = Integer.parseInt(query.replace("id=", "").trim());
-            Voluntario v = lista.buscarPorId(id);
-            if (v == null || v.getIdAsociado() == null) {
-                jsonRespuesta = "{\"status\":\"sin_companero\"}";
-            } else {
-                Voluntario companero = lista.buscarPorId(v.getIdAsociado());
+           int id = Integer.parseInt(query.replace("id=", "").trim());
+                Voluntario companero = BaseDatos.obtenerCompanero(id);
                 if (companero == null) {
                     jsonRespuesta = "{\"status\":\"sin_companero\"}";
                 } else {
@@ -590,7 +586,6 @@ static class WebCompaneroHandler implements HttpHandler {
                         + "\"celular\":\"" + companero.getCelular() + "\","
                         + "\"correo\":\"" + companero.getCorreo() + "\"}";
                 }
-            }
         } catch (Exception e) {
             jsonRespuesta = "{\"status\":\"error\"}";
         }
