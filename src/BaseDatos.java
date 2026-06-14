@@ -6,19 +6,23 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class BaseDatos {
-   private static final String URL = System.getenv("DATABASE_URL") != null
-    ? System.getenv("DATABASE_URL").replace("postgresql://", "jdbc:postgresql://")
-    : "jdbc:sqlite:/app/pancitallena.db";
-   static {
-    try {
-        Class.forName("org.postgresql.Driver");
-    } catch (ClassNotFoundException e) {
-        try {
-            Class.forName("org.sqlite.JDBC");
-        } catch (ClassNotFoundException ex) {
-            System.out.println("[CRÍTICO] No se encontró driver: " + ex.getMessage());
-        }
-    }
+   private static final String URL = buildUrl();
+
+private static String buildUrl() {
+    String dbUrl = System.getenv("DATABASE_URL");
+    if (dbUrl == null) return "jdbc:sqlite:/app/pancitallena.db";
+    // Convertir formato postgres:// a jdbc:postgresql://
+    dbUrl = dbUrl.replace("postgresql://", "");
+    String[] partes = dbUrl.split("@");
+    String credenciales = partes[0]; // usuario:contraseña
+    String resto = partes[1];        // host/db
+    String[] cred = credenciales.split(":");
+    String usuario = cred[0];
+    String contrasena = cred[1];
+    String[] hostDb = resto.split("/");
+    String host = hostDb[0];
+    String db = hostDb[1];
+    return "jdbc:postgresql://" + host + ":5432/" + db + "?user=" + usuario + "&password=" + contrasena + "&sslmode=require";
 }
     public static void inicializarBD() {
         String sqlTablaVoluntarios = "CREATE TABLE IF NOT EXISTS voluntarios ("
