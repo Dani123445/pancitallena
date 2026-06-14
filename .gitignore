@@ -5,12 +5,7 @@
 out/
 *.class
 
-#* Imágenes
-*.png
-*.jpg
-*.jpeg
-
-#* Variables de entorno
+# Variables de entorno
 .env
 
 

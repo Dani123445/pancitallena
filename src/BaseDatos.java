@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class BaseDatos {
-    private static final String URL = "jdbc:sqlite:pancitallena.db";
+    private static final String URL = "jdbc:sqlite:/app/pancitallena.db";
     static {
         try {
             Class.forName("org.sqlite.JDBC");
