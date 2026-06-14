@@ -36,11 +36,11 @@ if (datos) {
 
 document.querySelector('.salir').addEventListener('click', async function() {
     if (!confirm("¿Seguro que deseas dejar de ser voluntario?")) return;
-    const datos = JSON.parse(localStorage.getItem('resultadoVoluntario'));
-    if (!datos || !datos.dni) {
-        alert("No se encontró tu información.");
-        return;
-    }
+   if (!datos || !datos.dni) {
+    localStorage.removeItem('resultadoVoluntario');
+    window.location.href = '/index.html';
+    return;
+}
     try {
         const response = await fetch(`https://pancitallena.onrender.com/registrar?id=${datos.dni}`, {
             method: 'DELETE'
@@ -56,3 +56,31 @@ document.querySelector('.salir').addEventListener('click', async function() {
         alert("Error de conexión.");
     }
 });
+const datosActuales = JSON.parse(localStorage.getItem('resultadoVoluntario'));
+if (datosActuales && datosActuales.dni) {
+    fetch(`https://pancitallena.onrender.com/companero?id=${datosActuales.dni}`)
+        .then(r => r.json())
+        .then(data => {
+            if (data.status === 'success') {
+                const contenedorTabla = document.getElementById('contenedor-tabla-companeros');
+                contenedorTabla.innerHTML = `
+                    <table class="tabla-companeros" style="width:100%;border-collapse:collapse;margin-top:10px;">
+                        <thead>
+                            <tr style="background-color:#f2eb2b;color:white;">
+                                <th style="padding:10px;border:1px solid #ddd;">Nombre</th>
+                                <th style="padding:10px;border:1px solid #ddd;">Celular</th>
+                                <th style="padding:10px;border:1px solid #ddd;">Correo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding:10px;border:1px solid #ddd;text-align:center;">${data.nombre}</td>
+                                <td style="padding:10px;border:1px solid #ddd;text-align:center;">${data.celular}</td>
+                                <td style="padding:10px;border:1px solid #ddd;text-align:center;">${data.correo}</td>
+                            </tr>
+                        </tbody>
+                    </table>`;
+            }
+        })
+        .catch(() => {});
+}

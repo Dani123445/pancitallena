@@ -34,6 +34,7 @@ public class pancitallena {
             servidor.createContext("/subir-imagen",         new WebSubirImagenHandler());
             servidor.createContext("/voluntarios",  new WebVoluntariosHandler());
             servidor.createContext("/donaciones",   new WebDonacionesHandler());
+            servidor.createContext("/companero", new WebCompaneroHandler());
             servidor.createContext("/", new WebArchivosHandler());
             servidor.createContext("/comunidad", new WebComunidadHandler());
             servidor.setExecutor(null);
@@ -560,6 +561,45 @@ static class WebArchivosHandler implements HttpHandler {
         exchange.sendResponseHeaders(200, bytes.length);
         exchange.getResponseBody().write(bytes);
         exchange.getResponseBody().close();
+    }
+}
+static class WebCompaneroHandler implements HttpHandler {
+    @Override
+    public void handle(HttpExchange exchange) throws IOException {
+        exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
+        exchange.getResponseHeaders().add("Access-Control-Allow-Methods", "GET, OPTIONS");
+        exchange.getResponseHeaders().add("Access-Control-Allow-Headers", "Content-Type");
+        if ("OPTIONS".equalsIgnoreCase(exchange.getRequestMethod())) {
+            exchange.sendResponseHeaders(204, -1);
+            return;
+        }
+        String query = exchange.getRequestURI().getQuery();
+        String jsonRespuesta;
+        try {
+            int id = Integer.parseInt(query.replace("id=", "").trim());
+            Voluntario v = lista.buscarPorId(id);
+            if (v == null || v.getIdAsociado() == null) {
+                jsonRespuesta = "{\"status\":\"sin_companero\"}";
+            } else {
+                Voluntario companero = lista.buscarPorId(v.getIdAsociado());
+                if (companero == null) {
+                    jsonRespuesta = "{\"status\":\"sin_companero\"}";
+                } else {
+                    jsonRespuesta = "{\"status\":\"success\","
+                        + "\"nombre\":\"" + companero.getNombre() + "\","
+                        + "\"celular\":\"" + companero.getCelular() + "\","
+                        + "\"correo\":\"" + companero.getCorreo() + "\"}";
+                }
+            }
+        } catch (Exception e) {
+            jsonRespuesta = "{\"status\":\"error\"}";
+        }
+        byte[] bytes = jsonRespuesta.getBytes(StandardCharsets.UTF_8);
+        exchange.getResponseHeaders().set("Content-Type", "application/json; charset=UTF-8");
+        exchange.sendResponseHeaders(200, bytes.length);
+        OutputStream os = exchange.getResponseBody();
+        os.write(bytes);
+        os.close();
     }
 }
 }
