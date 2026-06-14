@@ -556,45 +556,55 @@ document.addEventListener('DOMContentLoaded', function() {
 async function agregarImagenComunidad() {
     const titulo      = document.getElementById('comunidad-titulo').value.trim();
     const descripcion = document.getElementById('comunidad-descripcion').value.trim();
-    const archivo     = document.getElementById('comunidad-foto').files[0];
+    const archivos    = document.getElementById('comunidad-foto').files;
 
-    if (!titulo || !archivo) {
-        alert('Completa el título y selecciona una imagen.');
+    if (!titulo || archivos.length === 0) {
+        alert('Completa el título y selecciona al menos una imagen.');
         return;
     }
     const btnGuardar       = document.getElementById('btn-guardar-comunidad');
     btnGuardar.disabled    = true;
-    btnGuardar.textContent = 'Subiendo imagen...';
-    try {
-        const respImagen = await fetch('https://pancitallena.onrender.com/subir-imagen', {
-            method:  'POST',
-            headers: { 'X-Filename': archivo.name },
-            body:    archivo
-        });
-        const dataImagen = await respImagen.json();
-        if (dataImagen.status !== 'success') {
-            alert('Error al subir la imagen: ' + dataImagen.message);
-            return;
-        }
-        const respComunidad = await fetch('https://pancitallena.onrender.com/comunidad', {
-            method:  'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body:    JSON.stringify({ titulo, descripcion, imagen: dataImagen.nombreArchivo })
-        });
-        const dataComunidad = await respComunidad.json();
-        if (dataComunidad.status === 'success') {
-            alert('Imagen agregada correctamente.');
+    btnGuardar.textContent = 'Subiendo imágenes...';
+
+    let i = 0;
+    async function subirSiguiente() {
+        if (i >= archivos.length) {
+            alert('Imágenes agregadas correctamente.');
             cancelarComunidad();
             cargarComunidad();
-        } else {
-            alert('Error: ' + dataComunidad.message);
+            btnGuardar.disabled    = false;
+            btnGuardar.textContent = 'Guardar imagen';
+            return;
         }
-    } catch (e) {
-        alert('Error de conexión con el servidor.');
-    } finally {
-        btnGuardar.disabled    = false;
-        btnGuardar.textContent = 'Guardar imagen';
+        const archivo = archivos[i];
+        i++;
+        try {
+            const respImagen = await fetch('https://pancitallena.onrender.com/subir-imagen', {
+                method:  'POST',
+                headers: { 'X-Filename': archivo.name },
+                body:    archivo
+            });
+            const dataImagen = await respImagen.json();
+            if (dataImagen.status !== 'success') {
+                alert('Error al subir imagen: ' + archivo.name);
+                subirSiguiente();
+                return;
+            }
+            const tituloImg = archivos.length > 1 ? titulo + ' ' + i : titulo;
+            const respComunidad = await fetch('https://pancitallena.onrender.com/comunidad', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify({ titulo: tituloImg, descripcion, imagen: dataImagen.nombreArchivo })
+            });
+            await respComunidad.json();
+            subirSiguiente();
+        } catch (e) {
+            alert('Error de conexión.');
+            btnGuardar.disabled    = false;
+            btnGuardar.textContent = 'Guardar imagen';
+        }
     }
+    subirSiguiente();
 }
 function cargarComunidad() {
     fetch('https://pancitallena.onrender.com/comunidad')
