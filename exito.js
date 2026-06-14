@@ -42,7 +42,7 @@ document.querySelector('.salir').addEventListener('click', async function() {
         return;
     }
     try {
-        const response = await fetch(`http://127.0.0.1:8080/registrar?id=${datos.dni}`, {
+        const response = await fetch(`https://pancitallena.onrender.com/registrar?id=${datos.dni}`, {
             method: 'DELETE'
         });
         const data = await response.json();

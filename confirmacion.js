@@ -31,7 +31,7 @@ function verHistorial() {
     }
     const correo = datos ? datos.correo : '';
     if (!correo) { alert('No se encontró tu correo.'); return; }
-    fetch(`http://127.0.0.1:8080/historial-donaciones?correo=${encodeURIComponent(correo)}`)
+    fetch(`https://pancitallena.onrender.com/historial-donaciones?correo=${encodeURIComponent(correo)}`)
         .then(r => r.json())
         .then(historial => {
             if (historial.length === 0) {
@@ -71,7 +71,7 @@ function exportarHistorial() {
     const correo = datos ? datos.correo : '';
     if (!correo) { alert('No se encontró tu correo.'); return; }
 
-    fetch(`http://127.0.0.1:8080/historial-donaciones?correo=${encodeURIComponent(correo)}`)
+    fetch(`https://pancitallena.onrender.com/historial-donaciones?correo=${encodeURIComponent(correo)}`)
         .then(r => r.json())
         .then(historial => {
             if (historial.length === 0) {

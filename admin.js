@@ -50,7 +50,7 @@ function insertarDesdeJson(raiz, nodoJson) {
 }
 function verificarContrasena() {
     const input = document.getElementById('input-contrasena').value;
-    fetch('http://127.0.0.1:8080/admin-login', {
+    fetch('https://pancitallena.onrender.com/admin-login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ contrasena: input })
@@ -115,7 +115,7 @@ function mostrarTab(tab) {
 }}
 
 function cargarAnimales() {
-    fetch('http://127.0.0.1:8080/perros')
+    fetch('https://pancitallena.onrender.com/perros')
         .then(r => r.json())
         .then(jsonData => {
             arbolAnimales = null;
@@ -205,7 +205,7 @@ function filtrar(estado) {
     renderizarAnimales(arbolAnimales, estado);
 }
 function cambiarEstado(id, estado) {
-    fetch(`http://127.0.0.1:8080/adoptar?id=${id}&estado=${encodeURIComponent(estado)}`)
+    fetch(`https://pancitallena.onrender.com/adoptar?id=${id}&estado=${encodeURIComponent(estado)}`)
         .then(r => r.json())
         .then(data => {
             if (data.status === 'success') {
@@ -228,7 +228,7 @@ function cambiarEstado(id, estado) {
 }
 function eliminarAnimal(id, nombre) {
     if (!confirm('¿Seguro que deseas eliminar a ' + nombre + '? Esta acción no se puede deshacer.')) return;
-    fetch(`http://127.0.0.1:8080/perros?id=${id}`, { method: 'DELETE' })
+    fetch(`https://pancitallena.onrender.com/perros?id=${id}`, { method: 'DELETE' })
         .then(r => r.json())
         .then(data => {
             if (data.status === 'success') {
@@ -240,7 +240,7 @@ function eliminarAnimal(id, nombre) {
         .catch(() => alert('Error de conexión.'));
 }
 function cargarVoluntarios() {
-    fetch('http://127.0.0.1:8080/voluntarios')
+    fetch('https://pancitallena.onrender.com/voluntarios')
         .then(r => r.json())
         .then(voluntarios => {
             const contenedor = document.getElementById('contenedor-voluntarios');
@@ -289,7 +289,7 @@ function generarFilasVoluntarios(jsonData, ref) {
     generarFilasVoluntarios(jsonData, ref);
 }
 function cargarDonaciones() {
-    fetch('http://127.0.0.1:8080/donaciones')
+    fetch('https://pancitallena.onrender.com/donaciones')
         .then(r => r.json())
         .then(donaciones => {
             const contenedor = document.getElementById('contenedor-donaciones');
@@ -334,7 +334,7 @@ function generarFilasDonaciones(jsonData, ref) {
 function dibujarArbolEnPantalla() {
     const contenedor = document.getElementById('contenedor-arbol');
     if (!arbolAnimales) {
-        fetch('http://127.0.0.1:8080/perros')
+        fetch('https://pancitallena.onrender.com/perros')
             .then(r => r.json())
             .then(jsonData => {
                 arbolAnimales = null;
@@ -472,7 +472,7 @@ async function agregarAnimal() {
     btnGuardar.disabled    = true;
     btnGuardar.textContent = 'Subiendo foto...';
     try {
-        const respImagen = await fetch('http://127.0.0.1:8080/subir-imagen', {
+        const respImagen = await fetch('https://pancitallena.onrender.com/subir-imagen', {
             method:  'POST',
             headers: { 'X-Filename': archivo.name },
             body:    archivo
@@ -483,7 +483,7 @@ async function agregarAnimal() {
             return;
         }
         btnGuardar.textContent = 'Guardando animal...';
-        const respAnimal = await fetch('http://127.0.0.1:8080/perros', {
+        const respAnimal = await fetch('https://pancitallena.onrender.com/perros', {
             method:  'POST',
             headers: { 'Content-Type': 'application/json' },
             body:    JSON.stringify({ id, nombre, raza, tipo,
@@ -566,7 +566,7 @@ async function agregarImagenComunidad() {
     btnGuardar.disabled    = true;
     btnGuardar.textContent = 'Subiendo imagen...';
     try {
-        const respImagen = await fetch('http://127.0.0.1:8080/subir-imagen', {
+        const respImagen = await fetch('https://pancitallena.onrender.com/subir-imagen', {
             method:  'POST',
             headers: { 'X-Filename': archivo.name },
             body:    archivo
@@ -576,7 +576,7 @@ async function agregarImagenComunidad() {
             alert('Error al subir la imagen: ' + dataImagen.message);
             return;
         }
-        const respComunidad = await fetch('http://127.0.0.1:8080/comunidad', {
+        const respComunidad = await fetch('https://pancitallena.onrender.com/comunidad', {
             method:  'POST',
             headers: { 'Content-Type': 'application/json' },
             body:    JSON.stringify({ titulo, descripcion, imagen: dataImagen.nombreArchivo })
@@ -597,7 +597,7 @@ async function agregarImagenComunidad() {
     }
 }
 function cargarComunidad() {
-    fetch('http://127.0.0.1:8080/comunidad')
+    fetch('https://pancitallena.onrender.com/comunidad')
         .then(r => r.json())
         .then(imagenes => {
             const contenedor = document.getElementById('contenedor-comunidad');
@@ -638,7 +638,7 @@ function cargarComunidad() {
 }
 function eliminarImagenComunidad(id) {
     if (!confirm('¿Eliminar esta imagen de la galería de comunidad?')) return;
-    fetch(`http://127.0.0.1:8080/comunidad?id=${id}`, { method: 'DELETE' })
+    fetch(`https://pancitallena.onrender.com/comunidad?id=${id}`, { method: 'DELETE' })
         .then(r => r.json())
         .then(data => {
             if (data.status === 'success') cargarComunidad();

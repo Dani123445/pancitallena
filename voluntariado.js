@@ -58,7 +58,7 @@ function procesarRegistro(e) {
         alert('La edad debe ser menor a 80 años.');
         return false;
     }
-    fetch('http://127.0.0.1:8080/registrar', {
+    fetch('https://pancitallena.onrender.com/registrar', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify(datosVoluntario)

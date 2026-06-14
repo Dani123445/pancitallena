@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = 'confirmacion.html';
         }
 
-        fetch('http://127.0.0.1:8080/donar', {
+        fetch('https://pancitallena.onrender.com/donar', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ nombre, correo, monto, metodo })

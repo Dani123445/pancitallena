@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    fetch('http://127.0.0.1:8080/comunidad')
+    fetch('https://pancitallena.onrender.com/comunidad')
         .then(r => r.json())
         .then(imagenes => {
             const contenedor = document.getElementById('galeria-comunidad');
