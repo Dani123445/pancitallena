@@ -100,7 +100,7 @@ window.addEventListener('DOMContentLoaded', () => {
         agregarOpcionMascota(perros, idx + 1, lista, selected, mascotaValorInput);
     }
 
-    fetch('http://127.0.0.1:8080/perros')
+    fetch('https://pancitallena.onrender.com/perros')
         .then(r => r.json())
         .then(perros => {
             const selectNativo = document.getElementById('mascota_elegida');

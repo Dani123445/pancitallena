@@ -55,7 +55,7 @@ function procesarRegistro(e) {
     if (!edad || edad < 1) {
         alert('Error, edad inválida.');
         return false;
-    } else if (edad < 18) {
+    } else if (edad < 8) {
         alert('Aún no puedes participar, te esperamos más adelante.');
         return false;
     } else if (edad > 80) {
