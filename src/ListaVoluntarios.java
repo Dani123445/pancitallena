@@ -151,7 +151,7 @@ public class ListaVoluntarios {
             .append("\"correo\":\"").append(v.getCorreo()).append("\",")
             .append("\"celular\":\"").append(v.getCelular()).append("\",")
             .append("\"horario\":\"").append(v.getHorarioDiaMes()).append("\",")
-            .append("\"asociado\":").append(v.getIdAsociado() != null ? v.getIdAsociado() : "null")
+            .append("\"asociado\":").append(actual.voluntarioAsociado != null ? actual.voluntarioAsociado.dato.getId() : "null")
             .append("}");
         primero = false;
         actual  = actual.siguiente;
