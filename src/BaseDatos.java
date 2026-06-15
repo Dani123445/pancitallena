@@ -341,15 +341,28 @@ public static Voluntario obtenerCompanero(int idVoluntario) {
     return null;
 }
 public static String obtenerTodosLosCompaneros(int idVoluntario) {
-    String sql = "SELECT v.id, v.nombre, v.celular, v.correo " +
-                 "FROM voluntarios v " +
-                 "WHERE v.idAsociado = ? OR v.id IN " +
-                 "(SELECT idAsociado FROM voluntarios WHERE id = ? AND idAsociado IS NOT NULL);";
+    String sqlCiudadHorario = "SELECT ciudad, horarioDiaMes FROM voluntarios WHERE id = ?;";
+    String ciudad = "";
+    String horario = "";
+    try (Connection conexion = DriverManager.getConnection(URL);
+         PreparedStatement pstmt = conexion.prepareStatement(sqlCiudadHorario)) {
+        pstmt.setInt(1, idVoluntario);
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+            ciudad  = rs.getString("ciudad");
+            horario = rs.getString("horarioDiaMes");
+        }
+    } catch (SQLException e) {
+        System.out.println("Error: " + e.getMessage());
+        return "[]";
+    }
+    String sql = "SELECT id, nombre, celular, correo FROM voluntarios WHERE ciudad = ? AND horarioDiaMes = ? AND id != ?;";
     StringBuilder sb = new StringBuilder("[");
     try (Connection conexion = DriverManager.getConnection(URL);
          PreparedStatement pstmt = conexion.prepareStatement(sql)) {
-        pstmt.setInt(1, idVoluntario);
-        pstmt.setInt(2, idVoluntario);
+        pstmt.setString(1, ciudad);
+        pstmt.setString(2, horario);
+        pstmt.setInt(3, idVoluntario);
         ResultSet rs = pstmt.executeQuery();
         boolean primero = true;
         while (rs.next()) {
@@ -362,7 +375,7 @@ public static String obtenerTodosLosCompaneros(int idVoluntario) {
             primero = false;
         }
     } catch (SQLException e) {
-        System.out.println("Error al obtener compañeros: " + e.getMessage());
+        System.out.println("Error: " + e.getMessage());
     }
     sb.append("]");
     return sb.toString();

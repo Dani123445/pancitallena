@@ -64,7 +64,7 @@ document.querySelector('.salir').addEventListener('click', async function() {
     }
 });
 const datosActuales = JSON.parse(localStorage.getItem('resultadoVoluntario'));
-if (datosActuales && datosActuales.dni && !datosActuales.match) {
+if (datosActuales && datosActuales.dni) {
     fetch(`https://pancitallena.onrender.com/companero?id=${datosActuales.dni}`)
         .then(r => r.json())
         .then(data => {
