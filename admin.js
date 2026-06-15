@@ -314,8 +314,26 @@ function generarFilasDonaciones(jsonData, ref) {
             <td style="padding:10px;border:1px solid #ddd;text-align:center;font-weight:bold;">S/ ${d.monto}</td>
             <td style="padding:10px;border:1px solid #ddd;text-align:center;">${d.metodo}</td>
             <td style="padding:10px;border:1px solid #ddd;text-align:center;">${d.fecha}</td>
+            <th style="padding:10px;border:1px solid #ddd;">Acciones</th>
         </tr>`;
     generarFilasDonaciones(jsonData, ref);
+
+    function eliminarVoluntario(id, nombre) {
+    if (!confirm('¿Eliminar a ' + nombre + '?')) return;
+    fetch(`https://pancitallena.onrender.com/registrar?id=${id}`, { method: 'DELETE' })
+        .then(r => r.json())
+        .then(data => {
+            if (data.status === 'success') cargarVoluntarios();
+            else alert('Error: ' + data.message);
+        })
+        .catch(() => alert('Error de conexión.'));
+        ref.filas += `<td style="padding:10px;border:1px solid #ddd;text-align:center;">
+    <button onclick="eliminarVoluntario(${v.id},'${v.nombre}')" 
+            style="background-color:#333;font-size:12px;padding:6px 12px;">
+        Eliminar
+    </button>
+</td>`;
+}
 }
 function dibujarArbolEnPantalla() {
     const contenedor = document.getElementById('contenedor-arbol');
