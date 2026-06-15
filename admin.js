@@ -254,10 +254,26 @@ function cargarVoluntarios() {
         })
         .catch(() => alert('Error al cargar voluntarios.'));
 }
+function eliminarVoluntario(id, nombre) {
+    if (!confirm('¿Eliminar a ' + nombre + '?')) return;
+    
+    fetch(`https://pancitallena.onrender.com/registrar?id=${id}`, { method: 'DELETE' })
+        .then(r => r.json())
+        .then(data => {
+            if (data.status === 'success') {
+                cargarVoluntarios(); 
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(() => alert('Error de conexión.'));
+}
+
 function generarFilasVoluntarios(jsonData, ref) {
-    if (ref.i >= jsonData.length) return;
+    if (!jsonData[ref.i]) return;
+    
     const v = jsonData[ref.i];
-    ref.i++;
+    
     ref.filas += `
         <tr>
             <td style="padding:10px;border:1px solid #ddd;">${v.id}</td>
@@ -266,13 +282,33 @@ function generarFilasVoluntarios(jsonData, ref) {
             <td style="padding:10px;border:1px solid #ddd;">${v.correo}</td>
             <td style="padding:10px;border:1px solid #ddd;">${v.celular}</td>
             <td style="padding:10px;border:1px solid #ddd;font-size:12px;">${v.horario}</td>
+            
             <td style="padding:10px;border:1px solid #ddd;text-align:center;">
-                ${v.asociado !== null
-                    ? '<span style="background-color:#28a745;color:white;padding:4px 10px;border-radius:20px;font-size:12px;">ID: ' + v.asociado + '</span>'
-                    : '<span style="background-color:#ccc;color:#555;padding:4px 10px;border-radius:20px;font-size:12px;">Sin pareja</span>'}
+                <div style="margin-bottom: 8px;">
+                    ${v.asociado !== null
+                        ? '<span style="background-color:#28a745;color:white;padding:4px 10px;border-radius:20px;font-size:12px;display:inline-block;">ID: ' + v.asociado + '</span>'
+                        : '<span style="background-color:#ccc;color:#555;padding:4px 10px;border-radius:20px;font-size:12px;display:inline-block;">Sin pareja</span>'}
+                </div>
+                <button onclick="eliminarVoluntario(${v.id},'${v.nombre}')" 
+                        style="background-color:#333;color:white;font-size:12px;padding:6px 12px;border:none;border-radius:4px;cursor:pointer;">
+                    Eliminar
+                </button>
             </td>
         </tr>`;
+
+    ref.i++;
     generarFilasVoluntarios(jsonData, ref);
+}
+
+function eliminarVoluntario(id, nombre) {
+    if (!confirm('¿Eliminar a ' + nombre + '?')) return;
+    fetch(`https://pancitallena.onrender.com/registrar?id=${id}`, { method: 'DELETE' })
+        .then(r => r.json())
+        .then(data => {
+            if (data.status === 'success') cargarVoluntarios();
+            else alert('Error: ' + data.message);
+        })
+        .catch(() => alert('Error de conexión.'));
 }
 function cargarDonaciones() {
     fetch('https://pancitallena.onrender.com/donaciones')
@@ -314,26 +350,8 @@ function generarFilasDonaciones(jsonData, ref) {
             <td style="padding:10px;border:1px solid #ddd;text-align:center;font-weight:bold;">S/ ${d.monto}</td>
             <td style="padding:10px;border:1px solid #ddd;text-align:center;">${d.metodo}</td>
             <td style="padding:10px;border:1px solid #ddd;text-align:center;">${d.fecha}</td>
-            <th style="padding:10px;border:1px solid #ddd;">Acciones</th>
         </tr>`;
     generarFilasDonaciones(jsonData, ref);
-
-    function eliminarVoluntario(id, nombre) {
-    if (!confirm('¿Eliminar a ' + nombre + '?')) return;
-    fetch(`https://pancitallena.onrender.com/registrar?id=${id}`, { method: 'DELETE' })
-        .then(r => r.json())
-        .then(data => {
-            if (data.status === 'success') cargarVoluntarios();
-            else alert('Error: ' + data.message);
-        })
-        .catch(() => alert('Error de conexión.'));
-        ref.filas += `<td style="padding:10px;border:1px solid #ddd;text-align:center;">
-    <button onclick="eliminarVoluntario(${v.id},'${v.nombre}')" 
-            style="background-color:#333;font-size:12px;padding:6px 12px;">
-        Eliminar
-    </button>
-</td>`;
-}
 }
 function dibujarArbolEnPantalla() {
     const contenedor = document.getElementById('contenedor-arbol');
