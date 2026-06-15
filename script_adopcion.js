@@ -106,6 +106,7 @@ window.addEventListener('DOMContentLoaded', () => {
             const selectNativo = document.getElementById('mascota_elegida');
             selectNativo.style.display = 'none';
             selectNativo.removeAttribute('required');
+
             const contenedor = document.getElementById('select-mascota');
             const wrapper    = document.createElement('div');
             wrapper.className = 'select-custom';
@@ -123,6 +124,7 @@ window.addEventListener('DOMContentLoaded', () => {
             mascotaValorInput.value = '';
 
             agregarOpcionMascota(perros, 0, lista, selected, mascotaValorInput);
+
             selected.addEventListener('click', function(e) {
                 e.stopPropagation();
                 const estaAbierto = lista.classList.contains('abierto');
@@ -137,6 +139,7 @@ window.addEventListener('DOMContentLoaded', () => {
             wrapper.appendChild(lista);
             wrapper.appendChild(mascotaValorInput);
             contenedor.appendChild(wrapper);
+
             const urlParams = new URLSearchParams(window.location.search);
             const animal = urlParams.get('animal');
             if (animal) {
@@ -157,10 +160,12 @@ window.addEventListener('DOMContentLoaded', () => {
             msg.textContent  = 'Error al cargar mascotas. Recarga la página.';
             contenedor.appendChild(msg);
         });
+
     document.getElementById('archivo_input').addEventListener('change', function() {
         document.getElementById('nombre_archivo').textContent =
             this.files[0] ? this.files[0].name : 'Ningún archivo seleccionado';
     });
+
     document.querySelector('.form_adopcion').addEventListener('submit', function(e) {
         e.preventDefault();
 
@@ -217,18 +222,10 @@ window.addEventListener('DOMContentLoaded', () => {
             fecha:    new Date().toLocaleDateString()
         }));
 
-        const formData = new FormData();
-        const entradas = new FormData(this);
-        for (const [key, value] of entradas.entries()) {
-            if (value instanceof File) {
-                if (value.name) formData.append('Certificado_Nombre', value.name);
-                continue;
-            }
-            formData.append(key, value);
-        }
+        const formData = new FormData(this);
         formData.set('Mascota_Elegida', mascota);
 
-        fetch(this.action, {
+        fetch('https://formspree.io/f/mlgkgnqq', {
             method:  'POST',
             body:    formData,
             headers: { 'Accept': 'application/json' }
