@@ -1,4 +1,5 @@
 window.addEventListener('DOMContentLoaded', () => {
+
     function convertirSelectCustom(selectId, contenedorId, onChange) {
         const selectNativo = document.getElementById(selectId);
         if (!selectNativo) return;
@@ -68,6 +69,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     document.addEventListener('click', cerrarTodosLosSelects);
+
     convertirSelectCustom('distrito',     'select-distrito');
     convertirSelectCustom('vivienda',     'select-vivienda', function(valor) {
         document.getElementById('vivienda_otro').style.display =
@@ -76,6 +78,7 @@ window.addEventListener('DOMContentLoaded', () => {
     convertirSelectCustom('tiempo',       'select-tiempo');
     convertirSelectCustom('tipo_mascota', 'select-tipo-mascota');
     document.getElementById('vivienda_otro').style.display = 'none';
+
     let mascotaValorInput = null;
 
     function agregarOpcionMascota(perros, idx, lista, selected, mascotaValorInput) {
@@ -100,7 +103,7 @@ window.addEventListener('DOMContentLoaded', () => {
         agregarOpcionMascota(perros, idx + 1, lista, selected, mascotaValorInput);
     }
 
-    fetch('https://pancitallena.onrender.com/perros')
+fetch('https://pancitallena.onrender.com/perros')
         .then(r => r.json())
         .then(perros => {
             const selectNativo = document.getElementById('mascota_elegida');
@@ -161,12 +164,7 @@ window.addEventListener('DOMContentLoaded', () => {
             contenedor.appendChild(msg);
         });
 
-    document.getElementById('archivo_input').addEventListener('change', function() {
-        document.getElementById('nombre_archivo').textContent =
-            this.files[0] ? this.files[0].name : 'Ningún archivo seleccionado';
-    });
-
-    document.querySelector('.form_adopcion').addEventListener('submit', function(e) {
+        document.querySelector('.form_adopcion').addEventListener('submit', function(e) {
         e.preventDefault();
 
         const mascota = mascotaValorInput ? mascotaValorInput.value : '';
@@ -206,9 +204,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
         if (!document.getElementById('motivo').value.trim()) {
             alert('Por favor, describe tu motivo para adoptar.'); return;
-        }
-        if (document.getElementById('archivo_input').files.length === 0) {
-            alert('Debes subir tu certificado de antecedentes penales.'); return;
         }
         if (!document.getElementById('agreement').checked) {
             alert('Debes aceptar las condiciones de seguimiento y responsabilidad.'); return;
